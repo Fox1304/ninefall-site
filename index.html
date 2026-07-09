@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numflip — a thinky number-cascade puzzle for iPhone & iPad</title>
+<meta name="description" content="Numbers add, boards topple. 72 certified levels, a daily board for the whole world, and not a single ad, purchase, or tracker.">
+<meta property="og:title" content="Numflip">
+<meta property="og:description" content="Flip the whole board in one perfect cascade. No ads. No purchases. No tracking.">
+<meta property="og:image" content="icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+  :root{
+    --paper:#F1E7D2; --card:#FBF6EA; --panel:#E3D2B0;
+    --ink:#3E2F26; --soft:#8B7763; --ring:#C86450; --teal:#3E7D74;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#211A13; --card:#2B231B; --panel:#2E251A;
+      --ink:#F2E7D4; --soft:#A6957F; --ring:#E0846F;
+    }
+  }
+  *{box-sizing:border-box; margin:0;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:ui-rounded,"SF Pro Rounded",-apple-system,"Segoe UI",system-ui,sans-serif;
+    line-height:1.6;
+  }
+  main{max-width:640px; margin:0 auto; padding:56px 22px 60px;}
+  .hero{text-align:center; margin-bottom:52px;}
+  .hero img{width:120px; height:120px; border-radius:28px; box-shadow:0 12px 32px rgba(62,42,26,.3);}
+  h1{font-size:44px; font-weight:900; letter-spacing:.06em; margin:20px 0 6px;}
+  .tagline{font-size:17px; font-weight:600; color:var(--soft);}
+  .promise{
+    display:inline-block; margin-top:18px; padding:8px 18px; border-radius:999px;
+    background:var(--card); font-size:13px; font-weight:800; letter-spacing:.04em;
+    box-shadow:0 2px 0 rgba(0,0,0,.12);
+  }
+  section{
+    background:var(--card); border-radius:22px; padding:26px 26px;
+    margin-bottom:18px; box-shadow:0 6px 18px rgba(0,0,0,.08);
+  }
+  h2{font-size:13px; font-weight:900; letter-spacing:.22em; text-transform:uppercase;
+     color:var(--soft); margin-bottom:12px;}
+  p{margin-bottom:10px; font-size:15.5px;}
+  p:last-child{margin-bottom:0;}
+  .rule{color:var(--ring); font-weight:800;}
+  a{color:var(--ring); font-weight:700; text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .btn{
+    display:inline-block; background:var(--ink); color:var(--paper);
+    padding:12px 22px; border-radius:14px; font-weight:800; font-size:15px;
+    box-shadow:0 3px 0 rgba(0,0,0,.2);
+  }
+  .btn:hover{text-decoration:none; opacity:.92;}
+  footer{text-align:center; font-size:12.5px; color:var(--soft); font-weight:600; margin-top:36px;}
+</style>
+</head>
+<body>
+<main>
+  <div class="hero">
+    <img src="icon.png" alt="Numflip app icon — a terracotta tile with a bold 9">
+    <h1>NUMFLIP</h1>
+    <p class="tagline">Flip the whole board in one perfect cascade.</p>
+    <span class="promise">No ads · No purchases · No tracking</span>
+  </div>
+
+  <section>
+    <h2>The game</h2>
+    <p>Every tile holds a number. Play one of yours onto it — the values add, the
+    tile flips, and every lower-numbered neighbor topples after it, chaining
+    down the board like dominoes. Clear it all with a handful of numbers.</p>
+    <p>One rule hides the depth: past 9, numbers roll over. <span class="rule">6 + 6 = 2.</span>
+    Greed has a price, nines are fortresses, zeros are scalpels.</p>
+    <p>Six worlds, 72 machine-certified levels, five hidden secrets, and the
+    Daily Flip — one board, the whole world, every day.</p>
+  </section>
+
+  <section id="support">
+    <h2>Support</h2>
+    <p>Found a bug, hit a wall, or want to suggest something?
+    <a href="https://github.com/Fox1304/numflip-site/issues">Open an issue</a>
+    and it will be read — Numflip is made by one person, so replies are human
+    and reasonably quick.</p>
+    <p>Undo is unlimited and every level is provably solvable in its par —
+    if one seems impossible, the hint button knows the way.</p>
+  </section>
+
+  <section id="privacy">
+    <h2>Privacy</h2>
+    <p><strong>Numflip collects no data. None.</strong></p>
+    <p>No analytics, no advertising identifiers, no tracking of any kind, and
+    no account to create. Your progress lives on your device and, if you use
+    iCloud, in your personal iCloud key-value storage that only you and your
+    devices can read. Nothing is ever sent to us or to anyone else.</p>
+    <p>The App Store privacy label reads “Data Not Collected” because there is
+    genuinely nothing to collect.</p>
+  </section>
+
+  <footer>© 2026 Thomas Sobstyl · Numflip for iPhone &amp; iPad</footer>
+</main>
+</body>
+</html>
