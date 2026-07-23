@@ -3,102 +3,397 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ninefall — a thinky number-cascade puzzle for iPhone & iPad</title>
-<meta name="description" content="Numbers add, boards topple. 72 certified levels, a daily board for the whole world, and not a single ad, purchase, or tracker.">
+<title>Ninefall — a chain-reaction number puzzle for iPhone & iPad</title>
+<meta name="description" content="Numbers add, boards topple. Six worlds of certified-fair puzzles, a daily board for the whole world, and the hunt for the perfect one-move Grand Cascade. Pay once. No ads, no tracking.">
 <meta property="og:title" content="Ninefall">
-<meta property="og:description" content="Flip the whole board in one perfect cascade. No ads. No purchases. No tracking.">
-<meta property="og:image" content="icon.png">
+<meta property="og:description" content="Numbers add. Boards topple. A chain-reaction number puzzle. Pay once, no ads, no tracking.">
+<meta property="og:image" content="assets/og.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fox1304.github.io/ninefall-site/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="assets/og.jpg">
 <link rel="icon" type="image/png" href="icon.png">
 <style>
   :root{
-    --paper:#F1E7D2; --card:#FBF6EA; --panel:#E3D2B0;
+    --paper:#F1E7D2; --card:#FBF6EA; --panel:#E3D2B0; --panel2:#EBDDBE;
     --ink:#3E2F26; --soft:#8B7763; --ring:#C86450; --teal:#3E7D74;
+    --plum:#6D3B4C; --butter:#E8C98E; --coral:#D98873;
+    --shadow:0 6px 18px rgba(62,47,38,.10);
+    --shadow-big:0 24px 60px rgba(62,47,38,.18);
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --paper:#211A13; --card:#2B231B; --panel:#2E251A;
+      --paper:#211A13; --card:#2B231B; --panel:#2E251A; --panel2:#342A1D;
       --ink:#F2E7D4; --soft:#A6957F; --ring:#E0846F;
+      --shadow:0 6px 18px rgba(0,0,0,.35);
+      --shadow-big:0 24px 60px rgba(0,0,0,.5);
     }
   }
   *{box-sizing:border-box; margin:0;}
+  html{scroll-behavior:smooth;}
   body{
     background:var(--paper); color:var(--ink);
     font-family:ui-rounded,"SF Pro Rounded",-apple-system,"Segoe UI",system-ui,sans-serif;
-    line-height:1.6;
+    line-height:1.6; overflow-x:hidden;
   }
-  main{max-width:640px; margin:0 auto; padding:56px 22px 60px;}
-  .hero{text-align:center; margin-bottom:52px;}
-  .hero .mark{width:154px; height:auto; margin-bottom:2px;}
-  h1{font-size:44px; font-weight:900; letter-spacing:.06em; margin:14px 0 6px;}
-  h1 .fall{color:var(--ring);}
-  .tagline{font-size:17px; font-weight:600; color:var(--soft);}
-  .promise{
-    display:inline-block; margin-top:18px; padding:8px 18px; border-radius:999px;
-    background:var(--card); font-size:13px; font-weight:800; letter-spacing:.04em;
-    box-shadow:0 2px 0 rgba(0,0,0,.12);
-  }
-  section{
-    background:var(--card); border-radius:22px; padding:26px 26px;
-    margin-bottom:18px; box-shadow:0 6px 18px rgba(0,0,0,.08);
-  }
-  h2{font-size:13px; font-weight:900; letter-spacing:.22em; text-transform:uppercase;
-     color:var(--soft); margin-bottom:12px;}
-  p{margin-bottom:10px; font-size:15.5px;}
-  p:last-child{margin-bottom:0;}
-  .rule{color:var(--ring); font-weight:800;}
+  main{max-width:1060px; margin:0 auto; padding:48px 22px 60px;}
   a{color:var(--ring); font-weight:700; text-decoration:none;}
   a:hover{text-decoration:underline;}
-  .btn{
-    display:inline-block; background:var(--ink); color:var(--paper);
-    padding:12px 22px; border-radius:14px; font-weight:800; font-size:15px;
-    box-shadow:0 3px 0 rgba(0,0,0,.2);
+
+  /* ---------- reveal-on-scroll ---------- */
+  .rv{opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);}
+  .rv.in{opacity:1; transform:none;}
+  @media (prefers-reduced-motion: reduce){
+    .rv{opacity:1; transform:none; transition:none;}
+    *{animation:none !important;}
   }
-  .btn:hover{text-decoration:none; opacity:.92;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid; grid-template-columns:1.15fr .85fr; gap:36px; align-items:center;
+    margin:18px 0 64px;
+  }
+  .hero-copy{text-align:left;}
+  .hero .mark{width:132px; height:auto; margin-bottom:6px;}
+  h1{font-size:clamp(44px,7vw,64px); font-weight:900; letter-spacing:.06em; margin:6px 0 8px; line-height:1.05;}
+  h1 .fall{color:var(--ring);}
+  .tagline{font-size:clamp(19px,2.6vw,23px); font-weight:800; margin-bottom:10px;}
+  .sub{font-size:16px; color:var(--soft); font-weight:600; max-width:46ch; margin-bottom:18px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px;}
+  .chip{
+    padding:7px 14px; border-radius:999px; background:var(--card);
+    font-size:12.5px; font-weight:800; letter-spacing:.04em; box-shadow:var(--shadow);
+  }
+  .cta-row{display:flex; align-items:center; flex-wrap:wrap; gap:14px;}
+  .date-pill{
+    background:var(--ink); color:var(--paper); border-radius:14px; padding:12px 20px;
+    font-weight:900; font-size:15px; box-shadow:0 3px 0 rgba(0,0,0,.2);
+  }
+  .price-note{font-size:13.5px; font-weight:700; color:var(--soft); max-width:30ch;}
+  .price-note b{color:var(--ring);}
+
+  /* phone frame */
+  .phone{
+    position:relative; border-radius:44px; overflow:hidden; background:#000;
+    box-shadow:var(--shadow-big), inset 0 0 0 3px rgba(0,0,0,.65);
+    width:min(300px,72vw); margin:0 auto; transform:rotate(1.6deg);
+  }
+  .phone video,.phone img{display:block; width:100%; height:auto;}
+  .hero .phone{animation:float 7s ease-in-out infinite;}
+  @keyframes float{0%,100%{transform:rotate(1.6deg) translateY(0)}50%{transform:rotate(1.6deg) translateY(-10px)}}
+
+  /* ---------- the rule (CSS tile demo) ---------- */
+  .rule-band{
+    background:var(--card); border-radius:26px; padding:34px 30px; margin-bottom:64px;
+    display:grid; grid-template-columns:auto 1fr; gap:34px; align-items:center;
+    box-shadow:var(--shadow);
+  }
+  .demo{display:flex; align-items:center; gap:14px; justify-content:center;}
+  .tile{
+    width:74px; height:74px; border-radius:18px; display:grid; place-items:center;
+    font-size:34px; font-weight:900; position:relative;
+  }
+  .tile.sunken{background:var(--panel); color:var(--soft); box-shadow:inset 0 3px 6px rgba(62,47,38,.22); font-weight:600;}
+  .plus{font-size:26px; font-weight:900; color:var(--soft);}
+  .tile.flip{
+    background:linear-gradient(160deg,var(--coral),#C97258); color:#FFF7E8;
+    box-shadow:0 6px 14px rgba(62,47,38,.25), inset 0 1px 0 rgba(255,255,255,.5);
+    animation:flipnum 5s cubic-bezier(.3,.9,.3,1) infinite;
+  }
+  .tile.flip .a,.tile.flip .b{position:absolute; inset:0; display:grid; place-items:center; backface-visibility:hidden;}
+  .tile.flip .b{transform:rotateY(180deg);}
+  @keyframes flipnum{
+    0%,38%{transform:rotateY(0)}
+    50%,88%{transform:rotateY(180deg)}
+    100%{transform:rotateY(360deg)}
+  }
+  .rule-copy h2{margin-bottom:10px;}
+  h2{font-size:13px; font-weight:900; letter-spacing:.22em; text-transform:uppercase; color:var(--soft);}
+  .rule-copy p{font-size:16.5px; margin-bottom:8px;}
+  .rule-copy .big{font-size:clamp(20px,3vw,26px); font-weight:900; line-height:1.3;}
+  .rule{color:var(--ring); font-weight:900;}
+
+  /* ---------- media rows ---------- */
+  .row{
+    display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center;
+    margin-bottom:74px;
+  }
+  .row.flip-order .media{order:2;}
+  .row h3{font-size:clamp(24px,3.4vw,32px); font-weight:900; line-height:1.15; margin:8px 0 12px;}
+  .cardimg{display:block; width:min(300px,72vw); margin:0 auto; border-radius:22px; box-shadow:var(--shadow-big); transform:rotate(-1.4deg);}
+  .row p{font-size:16px; color:var(--soft); font-weight:600; margin-bottom:10px;}
+  .row p strong{color:var(--ink);}
+  .badges{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+  .badges img{width:52px; height:52px; border-radius:14px; box-shadow:var(--shadow);}
+
+  /* ---------- feature grid ---------- */
+  .grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:74px;}
+  .cell{
+    background:var(--card); border-radius:18px; padding:18px 16px; box-shadow:var(--shadow);
+  }
+  .cell b{display:block; font-size:14.5px; margin-bottom:4px;}
+  .cell span{font-size:13px; color:var(--soft); font-weight:600; line-height:1.45; display:block;}
+
+  /* ---------- screenshot rail ---------- */
+  .rail-wrap{margin:0 -22px 74px;}
+  .rail{
+    display:flex; gap:18px; overflow-x:auto; padding:10px 22px 26px;
+    scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+  }
+  .rail::-webkit-scrollbar{height:8px;}
+  .rail::-webkit-scrollbar-thumb{background:var(--panel); border-radius:4px;}
+  .rail img{
+    width:min(250px,62vw); height:auto; border-radius:20px; scroll-snap-align:center;
+    box-shadow:var(--shadow); flex:none;
+  }
+
+  /* ---------- pricing ---------- */
+  .price-card{
+    background:var(--card); border-radius:26px; padding:40px 34px; text-align:center;
+    box-shadow:var(--shadow); margin-bottom:74px;
+  }
+  .price-card .amount{font-size:clamp(40px,6vw,56px); font-weight:900; line-height:1;}
+  .price-card .once{color:var(--ring);}
+  .price-card .pre{font-size:15.5px; font-weight:700; color:var(--soft); margin:12px auto 20px; max-width:52ch;}
+  .price-card ul{
+    list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:8px 18px; justify-content:center;
+    font-size:13.5px; font-weight:700; color:var(--soft);
+  }
+  .price-card li::before{content:"✓ "; color:var(--teal); font-weight:900;}
+
+  /* ---------- info panels ---------- */
+  .panels{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:40px;}
+  section.panel{
+    background:var(--card); border-radius:22px; padding:26px 26px; box-shadow:var(--shadow);
+  }
+  .panel h2{margin-bottom:12px;}
+  .panel p{margin-bottom:10px; font-size:15px;}
+  .panel p:last-child{margin-bottom:0;}
+
   footer{text-align:center; font-size:12.5px; color:var(--soft); font-weight:600; margin-top:36px;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:820px){
+    .hero{grid-template-columns:1fr; text-align:center;}
+    .hero-copy{text-align:center;}
+    .sub{margin-inline:auto;}
+    .chips,.cta-row{justify-content:center;}
+    .rule-band{grid-template-columns:1fr; text-align:center;}
+    .row,.row.flip-order{grid-template-columns:1fr;}
+    .row.flip-order .media{order:0;}
+    .row .media{max-width:340px; margin:0 auto;}
+    .badges{justify-content:center;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .panels{grid-template-columns:1fr;}
+  }
 </style>
 </head>
 <body>
 <main>
+
+  <!-- ================= HERO ================= -->
   <div class="hero">
-    <img class="mark" src="logo-mark.png" alt="Ninefall logo — a plum 9 tile toppling a cascade of tiles">
-    <h1>NINE<span class="fall">FALL</span></h1>
-    <p class="tagline">Flip the whole board in one perfect cascade.</p>
-    <span class="promise">No ads · No purchases · No tracking</span>
+    <div class="hero-copy">
+      <img class="mark" src="logo-mark.png" alt="Ninefall logo, a plum 9 tile toppling a cascade of tiles">
+      <h1>NINE<span class="fall">FALL</span></h1>
+      <p class="tagline">Numbers add. Boards topple.</p>
+      <p class="sub">A chain-reaction number puzzle for iPhone and iPad. Six worlds, five hidden
+      secrets, a Daily Flip shared by the whole world, and the hunt for the perfect
+      one-move Grand Cascade.</p>
+      <div class="chips">
+        <span class="chip">Pay once</span><span class="chip">No ads</span>
+        <span class="chip">No tracking</span><span class="chip">Plays offline</span>
+      </div>
+      <!-- AT APPROVAL: replace the cta-row contents with the official pre-order
+           badge from tools.applemediaservices.com pointing at the live store page. -->
+      <div class="cta-row">
+        <span class="date-pill">Coming August 20</span>
+        <span class="price-note">Pre-order opens soon at <b>$3.99</b>, then $4.99 from launch day.</span>
+      </div>
+    </div>
+    <div class="phone">
+      <video src="assets/hero.mp4" poster="assets/hero-poster.jpg" muted loop playsinline autoplay></video>
+    </div>
   </div>
 
-  <section>
-    <h2>The game</h2>
-    <p>Every tile holds a number. Play one of yours onto it — the values add, the
-    tile flips, and every lower-numbered neighbor topples after it, chaining
-    down the board like dominoes. Clear it all with a handful of numbers.</p>
-    <p>One rule hides the depth: past 9, numbers roll over. <span class="rule">6 + 6 = 2.</span>
-    Greed has a price, nines are fortresses, zeros are scalpels.</p>
-    <p>Six worlds, 72 machine-certified levels, five hidden secrets, and the
-    Daily Flip — one board, the whole world, every day.</p>
-  </section>
+  <!-- ================= THE RULE ================= -->
+  <div class="rule-band rv">
+    <div class="demo" aria-hidden="true">
+      <div class="tile sunken">6</div>
+      <div class="plus">+</div>
+      <div class="tile sunken">6</div>
+      <div class="plus">=</div>
+      <div class="tile flip"><span class="a">12</span><span class="b">2</span></div>
+    </div>
+    <div class="rule-copy">
+      <h2>One rule hides the depth</h2>
+      <p class="big">Numbers add when tiles meet. Past nine, they roll over.
+      <span class="rule">6&nbsp;+&nbsp;6&nbsp;=&nbsp;2.</span></p>
+      <p>Play a tile, the values add, the tile flips, and every lower-numbered neighbor
+      topples after it, chaining down the board like dominoes. Greed has a price,
+      nines are fortresses, zeros are scalpels.</p>
+    </div>
+  </div>
 
-  <section id="support">
-    <h2>Support</h2>
-    <p>Found a bug, hit a wall, or want to suggest something?
-    <a href="https://github.com/Fox1304/ninefall-site/issues">Open an issue</a>
-    and it will be read — Ninefall is made by one person, so replies are human
-    and reasonably quick.</p>
-    <p>Undo is unlimited and every level is provably solvable in its par —
-    if one seems impossible, the hint button knows the way.</p>
-  </section>
+  <!-- ================= ROWS ================= -->
+  <div class="row rv">
+    <div class="media"><div class="phone">
+      <video src="assets/worlds.mp4" poster="assets/worlds-poster.jpg" muted loop playsinline preload="none"></video>
+    </div></div>
+    <div>
+      <h2>The journey</h2>
+      <h3>Six worlds. Every level certified fair.</h3>
+      <p>72 handcrafted puzzles taught one idea at a time: stones, seals, gems, ice,
+      bombs, snares, wormholes. <strong>Our solver proves every level is solvable in
+      its par</strong> before it ships, and stores the proof. Five secret levels hide
+      off the map for gem hunters.</p>
+      <div class="badges">
+        <img src="assets/badge-world1.png" alt="World 1 badge">
+        <img src="assets/badge-world2.png" alt="World 2 badge">
+        <img src="assets/badge-world3.png" alt="World 3 badge">
+        <img src="assets/badge-world4.png" alt="World 4 badge">
+        <img src="assets/badge-world5.png" alt="World 5 badge">
+        <img src="assets/badge-world6.png" alt="World 6 badge">
+        <img src="assets/badge-grand-first.png" alt="Grand Cascade badge">
+      </div>
+    </div>
+  </div>
 
-  <section id="privacy">
-    <h2>Privacy</h2>
-    <p><strong>Ninefall collects no data. None.</strong></p>
-    <p>No analytics, no advertising identifiers, no tracking of any kind, and
-    no account to create. Your progress lives on your device and, if you use
-    iCloud, in your personal iCloud key-value storage that only you and your
-    devices can read. Nothing is ever sent to us or to anyone else.</p>
-    <p>The App Store privacy label reads “Data Not Collected” because there is
-    genuinely nothing to collect.</p>
-  </section>
+  <div class="row flip-order rv">
+    <div class="media">
+      <img class="cardimg" src="assets/shot-daily.jpg" alt="The Daily Flip on the dark Night theme" loading="lazy">
+    </div>
+    <div>
+      <h2>The ritual</h2>
+      <h3>One board, the whole world, every day.</h3>
+      <p>The Daily Flip is the same board for everyone, everywhere, once a day. Keep a
+      streak, compare par with friends, and put tomorrow's board on your Home Screen
+      with the widget. Miss a day? One free streak repair every month, because life
+      happens.</p>
+    </div>
+  </div>
+
+  <div class="row rv">
+    <div class="media"><div class="phone">
+      <video src="assets/toy.mp4" poster="assets/toy-poster.jpg" muted loop playsinline preload="none"></video>
+    </div></div>
+    <div>
+      <h2>The feel</h2>
+      <h3>Made like a toy.</h3>
+      <p>Chunky ceramic tiles that flip with real weight. Haptics choreographed to every
+      topple, marimba notes that climb as your chain grows, and a slow-motion finale
+      when the whole board goes. <strong>100 percent native</strong>, tiny download,
+      zero third-party code.</p>
+    </div>
+  </div>
+
+  <div class="row flip-order rv">
+    <div class="media"><div class="phone">
+      <video src="assets/oneshot.mp4" poster="assets/oneshot-poster.jpg" muted loop playsinline preload="none"></video>
+    </div></div>
+    <div>
+      <h2>The flex</h2>
+      <h3>One move. Flip the most.</h3>
+      <p>One-Shot mode hands you a dense board and a single tile. Bombs, wormholes,
+      and stones turn the obvious play into a trap; find the placement that beats
+      the <strong>certified best</strong>, then share the whole cascade as a looping
+      GIF straight from the win screen.</p>
+    </div>
+  </div>
+
+  <!-- ================= FEATURE GRID ================= -->
+  <div class="grid rv">
+    <div class="cell"><b>Flourishes, not stars</b><span>Each level carries one optional master-goal. No grinding, just elegance.</span></div>
+    <div class="cell"><b>One-Shot mode</b><span>Dense boards, one placement. Flip the most tiles in a single move.</span></div>
+    <div class="cell"><b>Kind by design</b><span>Unlimited undo, solver-powered hints, no lives, no timers.</span></div>
+    <div class="cell"><b>Game Center</b><span>A daily leaderboard where the lowest move count wins.</span></div>
+    <div class="cell"><b>Widget + iCloud</b><span>Streak on your Home Screen, progress on all your devices.</span></div>
+    <div class="cell"><b>Family Sharing</b><span>Buy once, share with your family group.</span></div>
+    <div class="cell"><b>9 languages</b><span>English, 日本語, 简体中文, 繁體中文, 한국어, Deutsch, Français, Español, Português.</span></div>
+    <div class="cell"><b>Accessible day one</b><span>VoiceOver boards, Reduce Motion everywhere, readable without color.</span></div>
+  </div>
+
+  <!-- ================= SCREENSHOT RAIL ================= -->
+  <div class="rail-wrap rv">
+    <div class="rail">
+      <img src="assets/shot-trap.jpg" alt="Gameplay with a hint banner: numbers add, boards topple" loading="lazy">
+      <img src="assets/shot-grand.jpg" alt="Grand Cascade celebration with confetti" loading="lazy">
+      <img src="assets/shot-home.jpg" alt="Home screen: Daily, Journey, Sandbox" loading="lazy">
+      <img src="assets/shot-map.jpg" alt="World map with gems and a secret level" loading="lazy">
+      <img src="assets/shot-daily.jpg" alt="The Daily Flip on the dark Night theme" loading="lazy">
+      <img src="assets/shot-snares.jpg" alt="A board with snare tiles that must never flip" loading="lazy">
+      <img src="assets/shot-widget.jpg" alt="Home-screen widget with the daily streak" loading="lazy">
+      <img src="assets/shot-gnight.jpg" alt="Day and Night themes" loading="lazy">
+    </div>
+  </div>
+
+  <!-- ================= PRICING ================= -->
+  <div class="price-card rv">
+    <h2>The deal</h2>
+    <p class="amount">$4.99<span class="once">, once.</span></p>
+    <p class="pre">Pre-order opens soon at $3.99. Order early, keep the lower price, and Ninefall
+    lands on your Home Screen the moment it releases on August 20.
+    Two more worlds arrive free in the first update.</p>
+    <ul>
+      <li>All six worlds and 72 levels</li>
+      <li>Every future level pack</li>
+      <li>Daily Flip forever</li>
+      <li>No ads, ever</li>
+      <li>No in-app purchases</li>
+      <li>Family Sharing</li>
+    </ul>
+  </div>
+
+  <!-- ================= PRIVACY / SUPPORT ================= -->
+  <div class="panels rv">
+    <section class="panel" id="privacy">
+      <h2>Privacy</h2>
+      <p><strong>Ninefall collects no data. None.</strong></p>
+      <p>No analytics, no advertising identifiers, no tracking of any kind, and no
+      account to create. Your progress lives on your device and, if you use iCloud,
+      in your personal iCloud storage that only you can read. The App Store privacy
+      label reads “Data Not Collected” because there is genuinely nothing to collect.</p>
+    </section>
+    <section class="panel" id="support">
+      <h2>Support &amp; press</h2>
+      <p>Found a bug, hit a wall, or want to suggest something?
+      <a href="https://github.com/Fox1304/ninefall-site/issues">Open an issue</a>.
+      Ninefall is made by one person, so replies are human and reasonably quick.</p>
+      <p>Press: screenshots, cascade GIFs, and the app preview video are available on
+      request through the same channel.</p>
+    </section>
+  </div>
 
   <footer>© 2026 Thomas Sobstyl · Ninefall for iPhone &amp; iPad</footer>
 </main>
+
+<script>
+  (function(){
+    var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Reveal-on-scroll
+    if (!reduced && "IntersectionObserver" in window) {
+      var ro = new IntersectionObserver(function(es){
+        es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); ro.unobserve(e.target); } });
+      }, {threshold:.14});
+      document.querySelectorAll(".rv").forEach(function(el){ ro.observe(el); });
+    } else {
+      document.querySelectorAll(".rv").forEach(function(el){ el.classList.add("in"); });
+    }
+    // Videos: play only while visible; never autoplay under reduced motion.
+    var vids = document.querySelectorAll("video");
+    if (reduced) {
+      vids.forEach(function(v){ v.removeAttribute("autoplay"); v.setAttribute("controls",""); });
+    } else if ("IntersectionObserver" in window) {
+      var vo = new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          var v = e.target;
+          if (e.isIntersecting){ v.play && v.play().catch(function(){}); }
+          else { v.pause && v.pause(); }
+        });
+      }, {threshold:.25});
+      vids.forEach(function(v){ vo.observe(v); });
+    }
+  })();
+</script>
 </body>
 </html>
