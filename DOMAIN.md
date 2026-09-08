@@ -6,40 +6,47 @@ thing left is four records in the OVH DNS zone.
 
 Live right now at **https://ninefall-site.vercel.app**
 
-## What OVH currently serves
+## What is left in the OVH zone (checked 8 September 2026)
+
+`www` has already been pointed at Vercel and the apex AAAA is gone. Three records
+remain.
 
 | Record | Name | Value | What to do |
 |---|---|---|---|
-| A | `ninefall.app` | `188.165.6.20` | **change** to `76.76.21.21` |
-| AAAA | `ninefall.app` | `2001:41d0:301:3::21` | **delete** |
-| A | `www` | `188.165.6.20` | **delete** |
+| A | `@` | `188.165.6.20` | **change** to `76.76.21.21` |
 | AAAA | `www` | `2001:41d0:301:3::21` | **delete** |
-| — | `www` | — | **add** CNAME to `cname.vercel-dns.com.` |
-| MX | `ninefall.app` | `mx1/2/3.mail.ovh.net` | **leave alone** (your email) |
-| TXT | `ninefall.app` | `v=spf1 include:mx.ovh.com -all` | **leave alone** (your email) |
-| TXT | `ninefall.app` | `1\|www.ninefall.app` | delete (OVH parking marker) |
+| TXT | `www` | `"3\|welcome"` | delete (OVH parking marker) |
+| TXT | `@` | `"1\|www.ninefall.app"` | delete (OVH redirect marker) |
+| CNAME | `ftp` | `ninefall.app.` | delete if you like; Vercel serves no FTP |
+| A | `www` | `76.76.21.21` | already correct, leave it |
 
-Both IPv6 records must go. Vercel publishes no AAAA for an apex, so if one is left
-behind every visitor on IPv6 keeps landing on the OVH "Site under construction" page
-while IPv4 visitors see the real site, which is a confusing way to find out.
+Everything else in the zone is mail or delegation and must be left exactly as it is:
+the three `MX` records, the `SPF` record, the `_autodiscover._tcp`, `_imaps._tcp` and
+`_submission._tcp` `SRV` records, the `autoconfig`, `autodiscover`, `imap`, `mail`,
+`pop3` and `smtp` `CNAME`s, and the two `NS` records. Those carry
+`contact@ninefall.app`.
+
+The leftover `www` AAAA is not theoretical. `www.ninefall.app` already resolves to
+Vercel over IPv4, yet it still serves OVH's "Site under construction" page, because
+browsers prefer IPv6 and the AAAA still points at OVH. Deleting it fixes www.
 
 ## Steps in the OVH manager
 
 1. Go to **ovh.com/manager** → **Web Cloud** → **Domain names** → **ninefall.app**.
 2. Open the **DNS zone** tab.
-3. Find the **A** record whose name is the bare domain and click the pencil. Replace
-   `188.165.6.20` with `76.76.21.21`. Confirm.
-4. Find the **AAAA** record for the bare domain and delete it.
-5. Delete the **A** and **AAAA** records for `www`.
-6. **Add an entry** → **CNAME**, subdomain `www`, target `cname.vercel-dns.com.`
-   (keep the trailing dot). Confirm.
-7. Delete the `1|www.ninefall.app` **TXT** record if it is still there.
-8. If **Redirection** in the left menu shows a redirect for the domain or for `www`,
-   remove it. It will fight the DNS otherwise.
-9. Do not touch the MX records or the SPF TXT record. That is your mail, and
-   `contact@ninefall.app` is now live on it. Deleting or editing either one
-   silently stops mail to that address, which is the one printed on the privacy,
-   support and press pages and inside the press kit.
+3. Edit the **A** record whose subdomain is empty (`@`): replace `188.165.6.20` with
+   `76.76.21.21`. Confirm.
+4. Delete the **AAAA** record on `www`.
+5. Delete the two OVH marker **TXT** records: `"1|www.ninefall.app"` on `@` and
+   `"3|welcome"` on `www`.
+6. If **Redirection** in the left menu still lists a redirect for the domain or for
+   `www`, remove it. It will keep recreating those TXT markers otherwise.
+7. Leave every mail record alone. See the table above for the full list.
+
+`www` is an A record rather than a CNAME. That is fine, and it is what
+`vercel domains inspect` recommends. A CNAME to `cname.vercel-dns.com.` would be
+marginally more future-proof if Vercel ever changes that IP, but it is not worth
+redoing today.
 
 ## Then
 
