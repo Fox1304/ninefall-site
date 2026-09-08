@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ninefall has moved to ninefall.app</title>
+<link rel="canonical" href="https://ninefall.app">
+<meta http-equiv="refresh" content="0; url=https://ninefall.app">
+<meta name="robots" content="noindex">
+<style>
+  body{background:#F1E7D2;color:#3E2F26;font-family:ui-rounded,-apple-system,system-ui,sans-serif;
+       display:grid;place-items:center;min-height:100vh;margin:0;text-align:center;padding:24px;line-height:1.6}
+  a{color:#C86450;font-weight:800}
+  @media (prefers-color-scheme:dark){body{background:#211A13;color:#F2E7D4}a{color:#E0846F}}
+</style>
+</head>
+<body>
+  <div>
+    <p><strong>Ninefall lives at ninefall.app now.</strong></p>
+    <p>Taking you to <a href="https://ninefall.app">ninefall.app</a>&hellip;</p>
+  </div>
+<script>
+  // The old single-page site used #privacy and #support anchors, and the App
+  // Store listing still links to them. Send those to the real pages.
+  var map = { '#privacy': '/privacy', '#support': '/support' };
+  var to = map[location.hash] || '';
+  location.replace('https://ninefall.app' + to);
+</script>
+</body>
+</html>
