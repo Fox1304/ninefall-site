@@ -157,14 +157,23 @@ export function mountBoard(root, level, opts = {}) {
     if (o.isGrandCascade)
       return `<b class="win">GRAND CASCADE.</b> One move, the whole board. That is the whole game.`;
     if (o.clearedBoard) return `<b class="win">Cleared</b> in ${game.moves} move${game.moves > 1 ? 's' : ''}.`;
-    if (o.didRollover && o.chain === 0)
-      return `<b>${before} + ${o.playedValue} = ${o.newValue}.</b> Past nine it rolled over, ` +
-             `so there was nothing left to topple. Greed has a price.`;
-    if (o.didRollover) return `Rolled over to <b>${o.newValue}</b>, and toppled ${o.chain}.`;
-    if (game.isStuck) return `Out of tiles. <b>Start again</b> and look for the quiet move.`;
-    if (o.chain === 0) return `It flipped, but nothing followed. A chain only runs downhill.`;
-    return `Chain of <b>${o.chain}</b>. ${game.remainingFlippable} ` +
-           `tile${game.remainingFlippable === 1 ? '' : 's'} still standing.`;
+
+    let msg;
+    if (o.didRollover && o.chain === 0) {
+      msg = `<b>${before} + ${o.playedValue} = ${o.newValue}.</b> Past nine it rolled over, ` +
+            `so there was nothing left to topple. Greed has a price.`;
+    } else if (o.didRollover) {
+      msg = `Rolled over to <b>${o.newValue}</b>, and toppled ${o.chain}.`;
+    } else if (o.chain === 0) {
+      msg = `It flipped, but nothing followed. A chain only runs downhill.`;
+    } else {
+      msg = `Chain of <b>${o.chain}</b>. ${game.remainingFlippable} ` +
+            `tile${game.remainingFlippable === 1 ? '' : 's'} still standing.`;
+    }
+    // Running out of tiles has to be said even when the last move did something
+    // worth reporting, or the board just sits there looking unfinished.
+    if (game.isStuck) msg += ` Out of tiles: <b>undo</b>, or start again.`;
+    return msg;
   }
 
   render(); say(opts.intro || '');
