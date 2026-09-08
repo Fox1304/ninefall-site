@@ -36,7 +36,10 @@ while IPv4 visitors see the real site, which is a confusing way to find out.
 7. Delete the `1|www.ninefall.app` **TXT** record if it is still there.
 8. If **Redirection** in the left menu shows a redirect for the domain or for `www`,
    remove it. It will fight the DNS otherwise.
-9. Do not touch the MX records or the SPF TXT record. That is your mail.
+9. Do not touch the MX records or the SPF TXT record. That is your mail, and
+   `contact@ninefall.app` is now live on it. Deleting or editing either one
+   silently stops mail to that address, which is the one printed on the privacy,
+   support and press pages and inside the press kit.
 
 ## Then
 
