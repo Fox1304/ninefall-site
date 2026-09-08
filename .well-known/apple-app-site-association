@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["LJ25L8WS66.com.foxtaming.ninefall"],
+        "components": [
+          { "/": "/p/*", "comment": "Shared board links open the game" }
+        ]
+      }
+    ]
+  },
+  "appclips": {
+    "apps": ["LJ25L8WS66.com.foxtaming.ninefall.Clip"]
+  }
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy — Ninefall</title>
+<meta name="description" content="Ninefall collects no data at all. No analytics, no crash reports, no account, no advertising identifier, no tracking of any kind.">
+<link rel="canonical" href="https://ninefall.app/privacy">
+<meta name="theme-color" content="#F1E7D2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#211A13" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="/icon.png" alt="" width="28" height="28">
+      <span class="wordmark">NINE<i>FALL</i></span>
+    </a>
+    <nav>
+      <a href="/press">Press</a>
+      <a href="/support">Support</a>
+      <div class="theme-switch" role="group" aria-label="Theme">
+        <button data-theme="day" aria-pressed="true">Day</button>
+        <button data-theme="night" aria-pressed="false">Night</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section>
+  <div class="wrap prose">
+    <p class="eyebrow">Privacy</p>
+    <h1 class="h2">Ninefall collects nothing.</h1>
+    <p class="updated soft" style="margin-top:14px">Last updated 8 September 2026</p>
+
+    <div class="panel" style="margin-top:28px">
+      <p style="color:var(--ink); font-size:17.5px"><strong>The short version.</strong>
+        Ninefall does not collect, store or transmit any personal data. There is no
+        account, no analytics, no crash reporting, no advertising identifier and no
+        third-party SDK of any kind. The game makes no network request on its own.</p>
+    </div>
+
+    <h2>What is collected</h2>
+    <p>Nothing. Not your name, not your email, not an anonymous identifier, not a device
+      fingerprint, not your location, and not usage statistics. The App Store privacy
+      label reads <strong>Data Not Collected</strong> and the Google Play data safety
+      section says <strong>No data collected</strong>, because there is genuinely nothing
+      to collect.</p>
+
+    <h2>Where your progress lives</h2>
+    <ul>
+      <li>Your progress, streak, statistics and settings are stored on your device.</li>
+      <li>On iPhone and iPad, if iCloud is enabled, that progress syncs through your own
+        private iCloud key-value storage. It sits in your iCloud account, not mine, and
+        I cannot read it.</li>
+      <li>On Android, progress stays on the device.</li>
+      <li>Deleting the app deletes the local data.</li>
+    </ul>
+
+    <h2>Game Center</h2>
+    <p>If you are signed in to Game Center, the Daily Flip leaderboard and the
+      achievements work through it, and Apple handles your Game Center identity and your
+      scores under <a href="https://www.apple.com/legal/privacy/">Apple's privacy
+      policy</a>. I receive nothing beyond the anonymous leaderboard Apple shows every
+      player. You can turn Game Center off in your device settings and the rest of the
+      game is unaffected.</p>
+
+    <h2>Purchases</h2>
+    <p>Ninefall is a one-time purchase. Payment is handled entirely by Apple, or by
+      Google, depending on where you bought it. I never see your payment details. I
+      receive only the aggregate sales reports those stores give every developer, which
+      contain no information that identifies you.</p>
+
+    <h2>Sharing and board links</h2>
+    <p>When you share a result, a replay or a board, the game hands the text or image to
+      your device's own share sheet. What happens next is between you and the app you
+      choose. Nothing is uploaded to me at any point.</p>
+    <p>A shared board link such as <code>ninefall.app/p/&hellip;</code> carries the puzzle
+      itself inside the link. It is decoded in your browser or in the app, and nothing
+      about who opened it is recorded.</p>
+
+    <h2>Children</h2>
+    <p>Ninefall is suitable for all ages and collects no data from anyone, children
+      included. Because nothing is collected, there is nothing to disclose, request or
+      delete under COPPA, GDPR-K or similar rules.</p>
+
+    <h2>Your rights</h2>
+    <p>Rights of access, correction, deletion and portability all apply to data a company
+      holds about you. I hold none. If you would like confirmation of that in writing,
+      ask and I will happily provide it.</p>
+
+    <h2>This website</h2>
+    <p>ninefall.app is a set of static files hosted on Vercel. There are no cookies, no
+      analytics and no tracking scripts. If you pick the Day or Night theme, that choice
+      is stored only in your own browser. Vercel keeps standard server access logs as the
+      infrastructure provider.</p>
+
+    <h2>Changes</h2>
+    <p>If this policy ever changes, the revised version appears on this page with a new
+      date above. If a future version of the game ever collects anything, that change
+      will be described here before it ships.</p>
+
+    <h2>Contact</h2>
+    <p>Questions about this policy, or about Ninefall in general, are welcome:
+      <a href="https://github.com/Fox1304/ninefall-site/issues">open an issue</a>.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Thomas Sobstyl</span>
+    <span>Made by one person, in public.</span>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/support">Support</a>
+      <a href="/press">Press</a>
+      <a href="https://apps.apple.com/app/id6789261861">App Store</a>
+    </nav>
+  </div>
+</footer>
+<script type="module">
+  import { initTheme, initReveal, initNav } from '/assets/site.js';
+  initTheme(); initReveal(); initNav();
+</script>
+</body>
+</html>

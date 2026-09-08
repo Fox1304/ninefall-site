@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  html,body{margin:0;}
+  body{width:1200px; height:630px; overflow:hidden; background:var(--paper);
+       display:grid; place-items:center;}
+  .card{display:grid; grid-template-columns:auto auto; gap:60px; align-items:center;}
+  .left{text-align:left;}
+  .wm{font-size:96px; font-weight:900; letter-spacing:-.045em; line-height:1;}
+  .wm i{font-style:normal; color:var(--ring);}
+  .tag{font-size:34px; font-weight:900; letter-spacing:-.02em; margin-top:18px;}
+  .sub{font-size:21px; font-weight:800; color:var(--ink-soft); margin-top:16px;}
+  .sum{display:flex; align-items:center; gap:14px; margin-top:34px;}
+  .sum .tile{width:84px;}
+  .sum .op{font-size:34px; font-weight:900; color:var(--ink-soft);}
+  .board{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; width:340px;}
+  .board .tile{width:100%;}
+</style></head><body>
+<div class="card">
+  <div class="left">
+    <div class="wm">NINE<i>FALL</i></div>
+    <div class="tag">Numbers add. Boards topple.</div>
+    <div class="sub">$4.99 once &middot; No ads &middot; No tracking &middot; 3.3 MB</div>
+    <div class="sum">
+      <span class="tile" data-t="6"></span><span class="op">+</span>
+      <span class="tile" data-t="6"></span><span class="op">=</span>
+      <span class="tile" data-t="2"></span>
+    </div>
+  </div>
+  <div class="board" id="b"></div>
+</div>
+<script type="module">
+  import { RAMP } from '/assets/engine.js';
+  // The Trap, mid-cascade: the played 8 and the tiles it has already toppled.
+  const vals = [3,8,3, 5,6,5, 3,5,3];
+  const up   = [1,1,1, 0,1,0, 0,0,0];
+  const b = document.getElementById('b');
+  b.innerHTML = vals.map((v,i) => {
+    const c = up[i] ? RAMP.flipped[v] : RAMP.muted[v];
+    const ink = up[i] ? RAMP.inkFlipped(v) : RAMP.inkMuted(v);
+    const sh = up[i] ? 'var(--tile-rise)' : 'var(--tile-sink)';
+    return `<span class="tile" style="--v:${c};--vi:${ink}">
+      <span class="face" style="position:absolute;inset:0;display:grid;place-items:center;
+        border-radius:26%;background:${c};color:${ink};box-shadow:${sh};
+        font-weight:${up[i]?900:700}">${v}</span></span>`;
+  }).join('');
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const v = +el.dataset.t;
+    el.innerHTML = `<span class="face" style="position:absolute;inset:0;display:grid;
+      place-items:center;border-radius:26%;background:${RAMP.flipped[v]};
+      color:${RAMP.inkFlipped(v)};box-shadow:var(--tile-rise);font-weight:900">${v}</span>`;
+  });
+</script></body></html>

@@ -1,0 +1,341 @@
+/* ==========================================================================
+   Ninefall — ninefall.app
+   Palette and tile treatment are lifted verbatim from the shipping app
+   (ios/Ninefall/Theme.swift, TileViews.swift). The chips are physical
+   objects; only the room's light changes between Day and Night.
+   ========================================================================== */
+
+:root{
+  /* Warm Workshop, Day (Theme.light) */
+  --paper:#F1E7D2;  --panel:#E3D2B0;  --panel-edge:#D5C098;  --card:#FBF6EA;
+  --ink:#3E2F26;    --ink-soft:#8B7763; --ring:#C86450;
+  --hair:rgba(62,47,38,.13);
+  --shadow-s:0 2px 6px rgba(62,47,38,.08);
+  --shadow-m:0 8px 24px rgba(62,47,38,.11);
+  --shadow-l:0 28px 70px rgba(62,47,38,.17);
+  --tile-sink:inset 0 3px 6px rgba(62,47,38,.26);
+  --tile-rise:0 6px 14px rgba(62,47,38,.25), inset 0 1px 0 rgba(255,255,255,.5);
+
+  /* The value ramp — luminance-monotonic, identical in both themes. */
+  --v0:#F2E7CE; --v1:#F1DCAC; --v2:#F0CE8F; --v3:#ECBB78; --v4:#E6A468;
+  --v5:#DC875C; --v6:#CE6A52; --v7:#B95349; --v8:#994145; --v9:#6F303F;
+  --m0:#EFE9DA; --m1:#EDE2C9; --m2:#EAD8B7; --m3:#E5CBA5; --m4:#DEBB97;
+  --m5:#D3A489; --m6:#C28E7E; --m7:#AC7973; --m8:#92686B; --m9:#6E555D;
+  --stone-top:#93846F; --stone-bottom:#6E6152;
+
+  --measure:1120px;
+  --step:clamp(72px,10vw,132px);   /* vertical rhythm between sections */
+}
+
+:root[data-theme="night"]{
+  --paper:#211A13;  --panel:#2E251A;  --panel-edge:#3C3122;  --card:#2B231B;
+  --ink:#F2E7D4;    --ink-soft:#A6957F; --ring:#E0846F;
+  --hair:rgba(242,231,212,.14);
+  --shadow-s:0 2px 6px rgba(0,0,0,.3);
+  --shadow-m:0 8px 24px rgba(0,0,0,.4);
+  --shadow-l:0 28px 70px rgba(0,0,0,.55);
+  --tile-sink:inset 0 3px 7px rgba(0,0,0,.45);
+  --tile-rise:0 6px 16px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.22);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="day"]){
+    --paper:#211A13;  --panel:#2E251A;  --panel-edge:#3C3122;  --card:#2B231B;
+    --ink:#F2E7D4;    --ink-soft:#A6957F; --ring:#E0846F;
+    --hair:rgba(242,231,212,.14);
+    --shadow-s:0 2px 6px rgba(0,0,0,.3);
+    --shadow-m:0 8px 24px rgba(0,0,0,.4);
+    --shadow-l:0 28px 70px rgba(0,0,0,.55);
+    --tile-sink:inset 0 3px 7px rgba(0,0,0,.45);
+    --tile-rise:0 6px 16px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.22);
+  }
+}
+
+/* ---------- reset ---------- */
+*,*::before,*::after{box-sizing:border-box;}
+*{margin:0;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:Nunito,ui-rounded,"SF Pro Rounded",-apple-system,system-ui,sans-serif;
+  font-size:17px; line-height:1.65; font-weight:600;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+img,video,svg{display:block; max-width:100%; height:auto;}
+button{font:inherit; color:inherit; background:none; border:0; cursor:pointer;}
+a{color:inherit; text-decoration:none;}
+:focus-visible{outline:3px solid var(--ring); outline-offset:3px; border-radius:6px;}
+
+/* ---------- type ---------- */
+h1,h2,h3,h4{font-weight:900; line-height:1.06; letter-spacing:-.02em;}
+.display{font-size:clamp(46px,8.4vw,92px); letter-spacing:-.045em; line-height:.92;}
+.h2{font-size:clamp(29px,4.3vw,46px); letter-spacing:-.03em;}
+.h3{font-size:clamp(21px,2.5vw,27px); letter-spacing:-.02em;}
+.eyebrow{
+  font-size:11.5px; font-weight:900; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--ink-soft); display:flex; align-items:center; gap:10px; margin-bottom:18px;
+}
+.eyebrow::after{content:""; flex:1; height:1px; background:var(--hair);}
+.lead{font-size:clamp(17.5px,2vw,20.5px); color:var(--ink-soft); line-height:1.6;}
+.soft{color:var(--ink-soft);}
+.accent{color:var(--ring);}
+p + p{margin-top:.85em;}
+strong{font-weight:900; color:var(--ink);}
+
+/* the wordmark, set live: Nunito Black, -4.5% tracking, two-tone */
+.wordmark{font-weight:900; letter-spacing:-.045em; line-height:1; white-space:nowrap;}
+.wordmark i{font-style:normal; color:var(--ring);}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--measure); margin-inline:auto; padding-inline:24px;}
+section{padding-block:calc(var(--step)/2);}
+.rule{height:1px; background:var(--hair); border:0; margin:0;}
+
+/* ---------- site chrome ---------- */
+.nav{
+  position:sticky; top:0; z-index:50; background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:saturate(180%) blur(14px); border-bottom:1px solid transparent;
+  transition:border-color .3s ease;
+}
+.nav.stuck{border-bottom-color:var(--hair);}
+.nav .wrap{display:flex; align-items:center; gap:18px; height:62px;}
+.nav .brand{display:flex; align-items:center; gap:10px; font-size:19px;}
+.nav .brand img{width:28px; height:28px;}
+.nav nav{margin-left:auto; display:flex; align-items:center; gap:6px;}
+.nav nav a{
+  padding:7px 12px; border-radius:10px; font-size:14.5px; font-weight:800; color:var(--ink-soft);
+}
+.nav nav a:hover{color:var(--ink); background:var(--card);}
+
+/* ---------- chips & buttons ---------- */
+.chip{
+  display:inline-flex; align-items:center; gap:7px; padding:7px 13px; border-radius:999px;
+  background:var(--card); box-shadow:var(--shadow-s); font-size:12.5px; font-weight:800;
+  letter-spacing:.02em; color:var(--ink-soft); white-space:nowrap;
+}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  padding:14px 22px; border-radius:16px; font-weight:900; font-size:16px;
+  letter-spacing:-.01em; transition:transform .12s ease, box-shadow .12s ease;
+}
+.btn-primary{background:var(--ink); color:var(--paper); box-shadow:0 4px 0 var(--panel-edge);}
+.btn-primary:hover{transform:translateY(-1px); box-shadow:0 5px 0 var(--panel-edge);}
+.btn-primary:active{transform:translateY(2px); box-shadow:0 2px 0 var(--panel-edge);}
+.btn-ghost{background:var(--card); color:var(--ink); box-shadow:var(--shadow-s);}
+.btn-ghost:hover{transform:translateY(-1px); box-shadow:var(--shadow-m);}
+.btn-sm{padding:9px 15px; font-size:14px; border-radius:12px;}
+
+/* Day / Night switch, named after the app's own themes */
+.theme-switch{
+  display:inline-flex; padding:3px; border-radius:999px; background:var(--panel);
+  box-shadow:var(--tile-sink);
+}
+.theme-switch button{
+  padding:5px 11px; border-radius:999px; font-size:12px; font-weight:900;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft);
+}
+.theme-switch button[aria-pressed="true"]{background:var(--card); color:var(--ink); box-shadow:var(--shadow-s);}
+
+/* ---------- tiles ---------- */
+.tile{
+  position:relative; aspect-ratio:1; border-radius:26%;
+  display:grid; place-items:center; font-weight:900; font-variant-numeric:tabular-nums;
+  transform-style:preserve-3d; transition:transform .42s cubic-bezier(.2,.85,.3,1);
+  background:transparent; user-select:none;
+}
+.tile .face{
+  position:absolute; inset:0; display:grid; place-items:center;
+  border-radius:26%; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+.tile .down{ /* unflipped: sunken into the board, flat and chalky */
+  background:var(--m); color:var(--mi); box-shadow:var(--tile-sink); font-weight:700;
+}
+.tile .up{   /* flipped: an enamelled chip, raised with a rim light */
+  background:var(--v); color:var(--vi); box-shadow:var(--tile-rise);
+  transform:rotateY(180deg);
+}
+.tile.is-flipped{transform:rotateY(180deg);}
+.tile.stone .down{
+  background:linear-gradient(160deg,var(--stone-top),var(--stone-bottom));
+  color:transparent; box-shadow:var(--tile-sink);
+}
+.tile.gem .down::after{
+  content:""; position:absolute; top:9%; right:9%; width:16%; height:16%;
+  background:#3E7D74; border-radius:3px; transform:rotate(45deg);
+}
+.tile.is-target{outline:3px solid var(--ring); outline-offset:3px;}
+.tile.is-ghost .down{filter:brightness(1.06);}
+.tile.playable{cursor:pointer;}
+.tile.playable:hover{filter:brightness(1.04);}
+
+/* ---------- the board ---------- */
+.board-shell{
+  background:var(--panel); border-radius:26px; padding:14px;
+  box-shadow:var(--shadow-l), inset 0 1px 0 rgba(255,255,255,.14);
+}
+.board{display:grid; gap:9px;}
+.rack{display:flex; gap:11px; justify-content:center; margin-top:16px; min-height:64px;}
+.rack .tile{width:62px; cursor:pointer; transition:transform .18s ease, box-shadow .18s ease;}
+.rack .tile .up{transform:none;}          /* hand tiles always show their face */
+.rack .tile.sel{transform:translateY(-9px) scale(1.05);}
+.rack .tile.sel .up{box-shadow:var(--tile-rise),0 0 0 3px var(--ring);}
+.rack .slot{width:62px; aspect-ratio:1; border-radius:26%; box-shadow:var(--tile-sink);
+  background:var(--panel); opacity:.5;}
+
+.demo-status{
+  min-height:2.9em; margin-top:14px; text-align:center; font-size:15px;
+  font-weight:800; color:var(--ink-soft); line-height:1.45;
+}
+.demo-status b{color:var(--ink);} .demo-status .win{color:var(--ring);}
+.demo-bar{display:flex; gap:8px; justify-content:center; margin-top:6px;}
+
+/* ---------- hero ---------- */
+.hero{padding-top:clamp(28px,5vw,60px);}
+.hero .wrap{
+  display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);
+  gap:clamp(32px,6vw,76px); align-items:center;
+}
+.hero .display{margin:14px 0 0;}
+.hero .tagline{font-size:clamp(20px,2.7vw,27px); font-weight:900; letter-spacing:-.02em; margin-top:16px;}
+.hero .lead{margin-top:12px; max-width:44ch;}
+.hero .cta{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:26px;}
+.facts{
+  display:flex; flex-wrap:wrap; gap:8px 10px; margin-top:22px;
+  font-size:13px; font-weight:800; color:var(--ink-soft);
+}
+.facts span{display:flex; align-items:center; gap:10px;}
+.facts span+span::before{content:""; width:4px; height:4px; border-radius:50%; background:var(--panel-edge);}
+
+.appstore{
+  display:inline-flex; align-items:center; gap:11px; padding:12px 20px 12px 17px;
+  border-radius:15px; background:var(--ink); color:var(--paper);
+  box-shadow:0 4px 0 var(--panel-edge); transition:transform .12s ease, box-shadow .12s ease;
+}
+.appstore:hover{transform:translateY(-1px); box-shadow:0 5px 0 var(--panel-edge);}
+.appstore:active{transform:translateY(2px); box-shadow:0 2px 0 var(--panel-edge);}
+.appstore svg{width:26px; height:26px; fill:currentColor; flex:none;}
+.appstore .l1{display:block; font-size:10.5px; font-weight:800; letter-spacing:.09em;
+  text-transform:uppercase; opacity:.72; line-height:1.25;}
+.appstore .l2{display:block; font-size:17px; font-weight:900; letter-spacing:-.02em; line-height:1.15;}
+
+.soon{
+  display:inline-flex; align-items:center; gap:9px; padding:12px 17px; border-radius:15px;
+  border:1.5px dashed var(--panel-edge); color:var(--ink-soft); font-size:13.5px; font-weight:800;
+}
+
+/* ---------- value ramp, used as a rule ---------- */
+.ramp{display:flex; gap:4px; margin:0;}
+.ramp span{
+  flex:1; height:9px; border-radius:3px; background:var(--c);
+}
+
+/* ---------- generic two-column band ---------- */
+.band{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(30px,5.5vw,72px); align-items:center;}
+.band.reverse .band-media{order:2;}
+
+/* ---------- laws ---------- */
+.laws{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+.law{background:var(--card); border-radius:22px; padding:26px 24px; box-shadow:var(--shadow-s);}
+.law .sum{display:flex; align-items:center; gap:9px; margin-bottom:18px;}
+.law .sum .tile{width:46px;}
+.law .sum .op{font-size:19px; font-weight:900; color:var(--ink-soft);}
+.law h3{margin-bottom:7px;}
+.law p{font-size:14.5px; color:var(--ink-soft); line-height:1.55;}
+
+/* ---------- worlds index ---------- */
+.worlds{border-top:1px solid var(--hair);}
+.world{
+  display:grid; grid-template-columns:auto 1fr auto; gap:22px; align-items:center;
+  padding:19px 4px; border-bottom:1px solid var(--hair);
+}
+.world .no{
+  width:46px; aspect-ratio:1; border-radius:26%; display:grid; place-items:center;
+  background:var(--v); color:var(--vi); font-weight:900; font-size:19px;
+  box-shadow:var(--tile-rise); flex:none;
+}
+.world h3{font-size:clamp(19px,2.2vw,24px);}
+.world .tag{font-size:14.5px; color:var(--ink-soft); margin-top:2px;}
+.world .mech{font-size:12.5px; font-weight:800; color:var(--ink-soft); text-align:right;
+  letter-spacing:.04em; text-transform:uppercase; max-width:15ch;}
+.world.locked .no{background:var(--panel); color:var(--ink-soft); box-shadow:var(--tile-sink);}
+
+/* ---------- spec sheet ---------- */
+.spec{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 clamp(30px,5vw,64px);}
+.spec div{display:flex; justify-content:space-between; gap:20px; align-items:baseline;
+  padding:13px 0; border-bottom:1px solid var(--hair);}
+.spec dt{font-weight:800; color:var(--ink-soft); font-size:14.5px;}
+.spec dd{font-weight:900; text-align:right; font-size:15px;}
+
+/* ---------- device frame ---------- */
+.device{
+  width:min(300px,74vw); margin-inline:auto; border-radius:13% / 6%;
+  background:var(--ink); padding:8px; box-shadow:var(--shadow-l);
+}
+.device img,.device video{border-radius:11% / 5.2%; width:100%;}
+
+/* ---------- pricing ---------- */
+.buy{background:var(--card); border-radius:30px; padding:clamp(36px,5.5vw,62px) 30px; text-align:center;
+  box-shadow:var(--shadow-m);}
+.eyebrow.centred,.buy .eyebrow{justify-content:center;}
+.eyebrow.centred::after,.buy .eyebrow::after{display:none;}
+.buy .amount{font-size:clamp(50px,8.5vw,84px); font-weight:900; letter-spacing:-.05em; line-height:1;}
+.buy ul{list-style:none; padding:0; margin:26px auto 0; max-width:640px;
+  display:flex; flex-wrap:wrap; gap:9px 20px; justify-content:center;
+  font-size:14px; font-weight:800; color:var(--ink-soft);}
+.buy li::before{content:"✓"; color:#3E7D74; font-weight:900; margin-right:7px;}
+
+/* ---------- panels / footer ---------- */
+.panel{background:var(--card); border-radius:24px; padding:30px 30px; box-shadow:var(--shadow-s);}
+footer{padding-block:44px 60px; border-top:1px solid var(--hair); margin-top:var(--step);}
+footer .wrap{display:flex; flex-wrap:wrap; gap:18px 30px; align-items:center;
+  font-size:13.5px; font-weight:700; color:var(--ink-soft);}
+footer nav{display:flex; gap:20px; margin-left:auto; flex-wrap:wrap;}
+footer a:hover{color:var(--ink);}
+
+/* ---------- prose (privacy / support / press) ---------- */
+.prose{max-width:70ch;}
+.prose h2{font-size:clamp(23px,3vw,30px); margin:44px 0 14px;}
+.prose h3{font-size:19px; margin:30px 0 8px;}
+.prose p,.prose li{color:var(--ink-soft); font-size:16.5px;}
+.prose ul{padding-left:22px; margin-top:10px;}
+.prose li{margin-bottom:7px;}
+.prose a{color:var(--ring); font-weight:800; text-decoration:underline; text-underline-offset:3px;}
+.prose .updated{font-size:13.5px; font-weight:800;}
+
+/* ---------- reveal ---------- */
+/* Progressive enhancement: without JS the `js` class is never set, so nothing
+   is ever hidden. */
+.js .rv{opacity:0; transform:translateY(22px);
+  transition:opacity .75s ease,transform .75s cubic-bezier(.2,.7,.2,1);}
+.js .rv.in{opacity:1; transform:none;}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .js .rv{opacity:1; transform:none; transition:none;}
+  .tile{transition:none;}
+  *{animation:none !important;}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr; gap:44px;}
+  .band,.band.reverse{grid-template-columns:1fr;}
+  .band.reverse .band-media{order:0;}
+  .laws{grid-template-columns:1fr;}
+  .spec{grid-template-columns:1fr;}
+  .nav nav a.hide-sm{display:none;}
+}
+@media (max-width:620px){
+  /* The nav links live in the footer too, so drop them rather than let them
+     collide with the wordmark. */
+  .nav nav a{display:none;}
+  .facts{gap:6px 16px;}
+  .facts span+span::before{display:none;}
+}
+@media (max-width:560px){
+  body{font-size:16.5px;}
+  .world{grid-template-columns:auto 1fr; gap:16px; padding:16px 2px;}
+  .world .mech{display:none;}
+  .rack .tile,.rack .slot{width:54px;}
+  .buy{padding-inline:22px;}
+}

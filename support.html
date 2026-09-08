@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Support — Ninefall</title>
+<meta name="description" content="Help with Ninefall: streaks, stuck levels, restoring your purchase, accessibility, and how to reach a human.">
+<link rel="canonical" href="https://ninefall.app/support">
+<meta name="theme-color" content="#F1E7D2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#211A13" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="/icon.png" alt="" width="28" height="28">
+      <span class="wordmark">NINE<i>FALL</i></span>
+    </a>
+    <nav>
+      <a href="/press">Press</a>
+      <a href="/support">Support</a>
+      <div class="theme-switch" role="group" aria-label="Theme">
+        <button data-theme="day" aria-pressed="true">Day</button>
+        <button data-theme="night" aria-pressed="false">Night</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section>
+  <div class="wrap prose">
+    <p class="eyebrow">Support</p>
+    <h1 class="h2">Something wrong? Ask a human.</h1>
+    <p style="margin-top:20px; font-size:18.5px">Ninefall is made by one person, so
+      replies come from that person and are usually quick. The best way to reach me is to
+      <a href="https://github.com/Fox1304/ninefall-site/issues">open an issue</a>. Bug
+      reports, level feedback and feature ideas are all welcome.</p>
+
+    <h2>I am stuck on a level</h2>
+    <p>You cannot be. Every level in the game is machine-verified as solvable in its par
+      before it ships. Tap the hint button for a solver-backed suggestion, and remember
+      that undo is unlimited and free. If the greedy move is not working, look for the
+      small one: a 0 changes a tile's value without adding to it, and past nine your sum
+      rolls over instead of growing.</p>
+
+    <h2>My streak broke and I did play</h2>
+    <p>The Daily Flip rolls over at midnight UTC, not local midnight, which occasionally
+      catches people out. You also get one automatic streak repair each month. If your
+      streak looks wrong beyond that, please open an issue and say roughly when you
+      played, and I will look into it.</p>
+
+    <h2>I bought the game and it is asking me to buy it again</h2>
+    <p>Sign in with the same Apple Account that made the purchase, then reinstall from
+      the App Store. Ninefall is a paid app with no in-app purchases, so there is nothing
+      to restore inside the game itself: the App Store licence is the whole thing. If you
+      bought it through Family Sharing, make sure the organiser still has sharing enabled.</p>
+
+    <h2>Will my progress move to a new phone?</h2>
+    <p>Yes, if iCloud is on. Progress lives in your own private iCloud storage and
+      follows you between devices. With iCloud off it stays on the one device.</p>
+
+    <h2>Is there an Android version?</h2>
+    <p>It is built and it is coming to Google Play. There is no date yet, and I would
+      rather say nothing than promise a week and miss it.</p>
+
+    <h2>Accessibility</h2>
+    <p>Boards are fully navigable with VoiceOver, and every tile announces its value,
+      its kind and whether it is flipped. Reduce Motion is respected throughout, including
+      the cascade. Nothing in the game is communicated by colour alone: values are always
+      shown as numerals.</p>
+
+    <h2>Refunds</h2>
+    <p>Refunds are handled by Apple, not by me. Use
+      <a href="https://reportaproblem.apple.com">reportaproblem.apple.com</a>. I would
+      still like to hear what went wrong.</p>
+
+    <h2>Press and review copies</h2>
+    <p>Assets, key facts and promo codes are on the <a href="/press">press page</a>.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Thomas Sobstyl</span>
+    <span>Made by one person, in public.</span>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/support">Support</a>
+      <a href="/press">Press</a>
+      <a href="https://apps.apple.com/app/id6789261861">App Store</a>
+    </nav>
+  </div>
+</footer>
+<script type="module">
+  import { initTheme, initReveal, initNav } from '/assets/site.js';
+  initTheme(); initReveal(); initNav();
+</script>
+</body>
+</html>

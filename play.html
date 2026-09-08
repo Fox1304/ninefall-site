@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A shared board — Ninefall</title>
+<meta name="description" content="Someone sent you a Ninefall board. Play it right here, no install needed.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Someone sent you a Ninefall board">
+<meta property="og:description" content="Numbers add, past nine they roll over, and every lower number topples after them. Play it in your browser.">
+<meta property="og:image" content="https://ninefall.app/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F1E7D2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#211A13" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .play-wrap{max-width:520px; margin-inline:auto; text-align:center;}
+  .play-board{width:min(430px,100%); margin:26px auto 0;}
+  .meta{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:18px;}
+  .cta-block{margin-top:38px; padding-top:30px; border-top:1px solid var(--hair);}
+  .appstore img{height:44px; width:auto;}
+  :root[data-theme="night"] .appstore img{filter:invert(1);}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="day"]) .appstore img{filter:invert(1);}}
+  .appstore{padding:0; background:none; box-shadow:none;}
+  .appstore:hover{transform:translateY(-1px); box-shadow:none;}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="/icon.png" alt="" width="28" height="28">
+      <span class="wordmark">NINE<i>FALL</i></span>
+    </a>
+    <nav>
+      <a href="/support">Support</a>
+      <div class="theme-switch" role="group" aria-label="Theme">
+        <button data-theme="day" aria-pressed="true">Day</button>
+        <button data-theme="night" aria-pressed="false">Night</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section>
+  <div class="wrap play-wrap">
+    <p class="eyebrow centred" id="eyebrow">A shared board</p>
+    <h1 class="h2" id="title">Someone sent you a board.</h1>
+    <p class="lead" id="blurb" style="margin-top:14px">Numbers add. Past nine they roll
+      over. Every lower-numbered neighbour topples after them. Clear the whole thing.</p>
+
+    <div class="meta" id="meta"></div>
+    <div class="play-board" id="play-board"></div>
+
+    <div class="cta-block">
+      <p class="lead" style="max-width:38ch; margin-inline:auto">Eight worlds, 96 more
+        boards and a Daily Flip for the whole world are in the app.</p>
+      <div class="cta" style="justify-content:center; margin-top:20px">
+        <a class="appstore" href="https://apps.apple.com/app/id6789261861">
+          <img src="/assets/badge-download.svg" alt="Download Ninefall on the App Store">
+        </a>
+      </div>
+      <p class="facts" style="justify-content:center">
+        <span>$4.99, once</span><span>3.3 MB</span><span>No ads</span><span>No tracking</span>
+      </p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Thomas Sobstyl</span>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/support">Support</a>
+      <a href="/press">Press</a>
+    </nav>
+  </div>
+</footer>
+
+<script type="module">
+  import { initTheme, initNav } from '/assets/site.js';
+  import { decodeBoardCode } from '/assets/engine.js';
+  import { mountBoard } from '/assets/board.js';
+
+  initTheme(); initNav();
+
+  const FLOURISH = {
+    oneMove:      ['One placement',  'Clear the board in a single placement'],
+    noRollover:   ['No rollover',    'Never roll past 9'],
+    noOverplay:   ['No overplay',    'Never play onto a flipped tile'],
+    finishOnNine: ['End on a 9',     'Your last placement must make a 9'],
+    fullHand:     ['Full hand',      'Win using every number'],
+  };
+
+  // Accept both link shapes the app produces: /p/<code> and ?b=<code>.
+  const fromPath = location.pathname.split('/').filter(Boolean);
+  const pIdx = fromPath.indexOf('p');
+  const code = (pIdx >= 0 && fromPath[pIdx + 1]) || new URLSearchParams(location.search).get('b');
+
+  const level = code ? decodeBoardCode(code) : null;
+  const elMeta = document.getElementById('meta');
+
+  if (!level) {
+    document.getElementById('eyebrow').textContent = 'Nothing to play';
+    document.getElementById('title').textContent = code
+      ? 'That link did not decode.' : 'No board in this link.';
+    document.getElementById('blurb').innerHTML = code
+      ? 'The board code is malformed or was made by a newer version of the game. Ask for a fresh link, or <a href="/" style="color:var(--ring);font-weight:900">start from the beginning</a>.'
+      : 'Shared board links look like <code>ninefall.app/p/&hellip;</code>. <a href="/" style="color:var(--ring);font-weight:900">Have a look at the game</a> instead.';
+  } else {
+    const chips = [`${level.rows} &times; ${level.cols}`,
+                   `${level.hand.length} tile${level.hand.length === 1 ? '' : 's'} in hand`];
+    if (level.par != null) chips.push(`par ${level.par}`);
+    const f = FLOURISH[level.flourish];
+    if (f) chips.push(`${f[0]}: ${f[1]}`);
+    elMeta.innerHTML = chips.map((c) => `<span class="chip">${c}</span>`).join('');
+
+    mountBoard(document.getElementById('play-board'), level,
+      { intro: 'Tap a tile in your hand, then a tile on the board.' });
+  }
+</script>
+</body>
+</html>
