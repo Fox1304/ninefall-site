@@ -25,7 +25,12 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="/assets/site.css">
 <style>
-  .hero-board{width:min(392px,100%); margin-inline:auto;}
+  .try-board{width:min(392px,100%); margin-inline:auto;}
+  .hero .device{width:min(318px,74vw);}
+  /* Two-column hero: keep the whole phone, and its caption, above the fold. */
+  @media (min-width:901px){
+    .hero .device{width:min(318px, max(230px, calc((100vh - 250px) / 2.19)));}
+  }
   .board-note{font-size:13.5px; color:var(--ink-soft); text-align:center;
     margin-top:14px; max-width:40ch; margin-inline:auto; font-weight:700;}
   .appstore img{height:44px; width:auto;}
@@ -92,10 +97,33 @@
     </div>
 
     <div>
-      <div class="hero-board" id="hero-board"></div>
-      <p class="board-note">This is <b>1&#8209;8 &middot; Descent</b>, the eighth level in
-        the game, exactly as it ships. Three tiles, par two. The obvious move is a
-        trap, and one of these tiles adds nothing at all.</p>
+      <div class="device">
+        <video src="/assets/hero.mp4" poster="/assets/hero-poster.jpg"
+          autoplay muted loop playsinline preload="auto"
+          aria-label="One tile lands on a nine-tile board and every tile topples after it"></video>
+      </div>
+      <p class="board-note">This is <b>1&#8209;11 &middot; Grand Finale</b>, recorded in
+        the game. Nine tiles, one placement, and the whole board goes. That is a
+        <b>Grand Cascade</b>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PLAY IT HERE ============================ -->
+<section id="try">
+  <div class="wrap band">
+    <div class="band-media rv">
+      <div class="try-board" id="try-board"></div>
+    </div>
+    <div class="rv">
+      <p class="eyebrow">Your turn</p>
+      <h2 class="h2">Now play one for real.</h2>
+      <p class="lead" style="margin-top:16px">This is <b>1&#8209;8 &middot; Descent</b>, the
+        eighth level in the game, exactly as it ships. Three tiles, par two. The obvious
+        move is a trap, and one of these tiles adds nothing at all.</p>
+      <p class="lead" style="margin-top:14px">It runs the game's own rules engine, right
+        in the page: the same cascade, the same rollover, the same unlimited undo. No
+        install, no account.</p>
     </div>
   </div>
 </section>
@@ -163,7 +191,7 @@
         <div><b>result</b> <span class="ok">certified</span></div>
       </div>
       <p class="board-note" style="text-align:left; max-width:none">The real record for
-        the level in the hero, taken from the game's own level data. 103 boards carry
+        the level you just played, taken from the game's own level data. 103 boards carry
         one, including all seven secrets. Clear a whole board in a single placement and
         that is a <b>Grand Cascade</b>, which is what the game is really about.</p>
     </div>
@@ -413,7 +441,7 @@
 
   // 1-8 · Descent, straight out of Campaign.swift. Par 2 with a spare tile in
   // hand, so it takes two or three placements and rewards a look before a tap.
-  mountBoard(document.getElementById('hero-board'), {
+  mountBoard(document.getElementById('try-board'), {
     rows: 4, cols: 3,
     cellSpecs: ['0','6','2','6','7','6','5','5','3','2','4','5'],
     hand: [0, 6, 6], par: 2, flourish: 'finishOnNine',
