@@ -1,0 +1,14 @@
+{
+  "name": "Ninefall",
+  "short_name": "Ninefall",
+  "description": "A chain-reaction number puzzle. Play a tile, the values add, and every lower number topples after it. Past nine they roll over.",
+  "start_url": "/",
+  "theme_color": "#F1E7D2",
+  "background_color": "#F1E7D2",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ]
+}
