@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ninefall: one tap, the whole board topples</title>
+<meta name="description" content="The chain-reaction number puzzle from the video. Tiles add, past nine they roll over, and every lower tile falls. 96 certified-fair levels. $4.99 once, no ads, no timers, no energy.">
+<!-- Ad landing page: kept out of search so the homepage stays the canonical entry. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://ninefall.app/tiktok">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ninefall">
+<meta property="og:url" content="https://ninefall.app/tiktok">
+<meta property="og:title" content="Ninefall: one tap, the whole board topples">
+<meta property="og:description" content="A chain-reaction number puzzle. Past nine, numbers roll over. 6 + 6 = 2. Play a real level right on the page.">
+<meta property="og:image" content="https://ninefall.app/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="apple-itunes-app" content="app-id=6789261861">
+<meta name="theme-color" content="#F1E7D2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#211A13" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  /* ---- landing-page rhythm: tighter than the homepage, one job per screen ---- */
+  .lp section{padding-block:clamp(26px,5vw,60px);}
+  .lp .nav{position:static; backdrop-filter:none; background:transparent;}
+  .lp .nav .wrap{height:56px;}
+  .lp footer{margin-top:clamp(24px,5vw,60px); padding-block:30px 40px;}
+
+  /* ---- hero ---- */
+  .lp-hero{padding-top:clamp(6px,2vw,28px);}
+  .lp-hero .display{margin-top:6px;}
+  .lp-hero .lead{max-width:46ch;}
+  .lp-hero .device{width:min(250px,62vw);}
+  @media (min-width:901px){
+    .lp-hero .device{width:min(300px, max(230px, calc((100vh - 250px) / 2.19)));}
+  }
+  .lp-cta{flex-direction:column; align-items:stretch; gap:12px; max-width:420px; margin-top:24px;}
+  .lp-store{justify-content:center; padding:15px 22px; gap:13px; width:100%;}
+  .lp-store svg{width:30px; height:30px;}
+  .lp-store .l2{font-size:19px;}
+  .lp-android{font-size:14px; font-weight:800; color:var(--ink-soft); text-align:center;}
+  .lp-android b{color:var(--ring); font-weight:900;}
+  .fallback{font-size:12.5px; font-weight:800; color:var(--ink-soft); margin-top:12px;}
+  .fallback a{text-decoration:underline; text-underline-offset:3px;}
+  .board-note{font-size:13.5px; color:var(--ink-soft); text-align:center;
+    margin-top:14px; max-width:40ch; margin-inline:auto; font-weight:700;}
+
+  /* ---- laws, compact ---- */
+  .lp .law{padding:20px 20px;}
+  .lp .law .sum{margin-bottom:12px;}
+  .lp .law .sum .tile{width:40px;}
+
+  /* ---- the playable level ---- */
+  .try-board{width:min(392px,100%); margin-inline:auto;}
+  .after-win{
+    margin-top:18px; background:var(--card); border-radius:22px; padding:22px 22px 24px;
+    box-shadow:var(--shadow-m); text-align:center;
+  }
+  .after-win .h3{margin-bottom:8px;}
+  .after-win p{font-size:15px; color:var(--ink-soft); line-height:1.5;}
+  .after-win .lp-store{margin:16px auto 0; max-width:360px;}
+
+  /* ---- sticky bottom bar: appears once the hero button has scrolled away ---- */
+  .stick{
+    position:fixed; left:0; right:0; bottom:0; z-index:60;
+    transform:translateY(110%); transition:transform .28s ease;
+    background:color-mix(in srgb,var(--paper) 92%,transparent);
+    backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px);
+    border-top:1px solid var(--hair);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  }
+  .stick.on{transform:none;}
+  .stick-in{max-width:var(--measure); margin-inline:auto; display:flex; align-items:center; gap:14px;}
+  .stick-txt{display:flex; flex-direction:column; line-height:1.25; min-width:0;}
+  .stick-txt b{font-size:15px; white-space:nowrap;}
+  .stick-txt span{font-size:12.5px; color:var(--ink-soft); font-weight:800; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis;}
+  .stick-btn{margin-left:auto; padding:12px 20px; border-radius:14px; white-space:nowrap; flex:none;}
+  .lp.has-stick{padding-bottom:calc(84px + env(safe-area-inset-bottom));}
+  @media (prefers-reduced-motion:reduce){.stick{transition:none;}}
+
+  /* ---- price block, tightened ---- */
+  .lp .buy{padding:clamp(30px,5vw,50px) 24px;}
+  .lp .buy .lp-store{max-width:360px; margin:22px auto 0;}
+  .trust{font-size:14px; color:var(--ink-soft); font-weight:800; text-align:center; margin-top:18px;}
+  .trust a{color:var(--ring); font-weight:900;}
+</style>
+</head>
+<body class="lp">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="/icon.png" alt="" width="28" height="28">
+      <span class="wordmark">NINE<i>FALL</i></span>
+    </a>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================ HERO ============================ -->
+<section class="hero lp-hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">The game from the video</p>
+      <h1 class="display wordmark">NINE<i>FALL</i></h1>
+      <p class="tagline">One tap. The whole board topples.</p>
+      <p class="lead">A chain-reaction number puzzle for iPhone and iPad. Tiles add, past
+        nine they roll over, and every lower tile falls after them. Find the one move
+        that clears everything.</p>
+
+      <div class="cta lp-cta" id="hero-cta">
+        <a class="appstore lp-store" data-store
+           href="https://apps.apple.com/app/apple-store/id6789261861?pt=36573800&amp;ct=Tiktok%20First%20Campaign&amp;mt=8">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+          <span><span class="l1" data-store-l1>Download on the</span><span class="l2" data-store-l2>App Store</span></span>
+        </a>
+        <a class="lp-android" data-android-line href="/beta">On Android? <b>Join the free beta</b></a>
+      </div>
+
+      <p class="facts">
+        <span>$4.99, once</span><span>No ads</span><span>No timers</span>
+        <span>No energy</span><span>3.3 MB</span>
+      </p>
+      <p class="fallback" data-ios-only hidden>App Store did not open?
+        <a data-store-itms href="itms-apps://apps.apple.com/app/apple-store/id6789261861?pt=36573800&amp;ct=Tiktok%20First%20Campaign&amp;mt=8">Tap here</a>.</p>
+    </div>
+
+    <div>
+      <div class="device">
+        <video src="/assets/hero.mp4" poster="/assets/hero-poster.jpg"
+          autoplay muted loop playsinline preload="auto"
+          aria-label="One tile lands on a nine-tile board and every tile topples after it"></video>
+      </div>
+      <p class="board-note">Level <b>1&#8209;11, Grand Finale</b>, recorded in the game.
+        Nine tiles, one placement, and the whole board goes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ THE LAWS ============================ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow rv">Three rules, no manual</p>
+    <div class="laws rv">
+      <div class="law">
+        <div class="sum" aria-hidden="true">
+          <span class="tile is-flipped" data-tile="5"></span><span class="op">+</span>
+          <span class="tile is-flipped" data-tile="3"></span><span class="op">=</span>
+          <span class="tile is-flipped" data-tile="8"></span>
+        </div>
+        <h3 class="h3">Tiles add</h3>
+        <p>Play a tile from your hand onto one on the board. The values add, and the
+          tile flips face up.</p>
+      </div>
+      <div class="law">
+        <div class="sum" aria-hidden="true">
+          <span class="tile is-flipped" data-tile="6"></span><span class="op">+</span>
+          <span class="tile is-flipped" data-tile="6"></span><span class="op">=</span>
+          <span class="tile is-flipped" data-tile="2"></span>
+        </div>
+        <h3 class="h3">Past nine, they roll over</h3>
+        <p>There is no twelve. This is the signature rule, and the reason the greedy
+          move is usually the wrong one.</p>
+      </div>
+      <div class="law">
+        <div class="sum" aria-hidden="true">
+          <span class="tile is-flipped" data-tile="8"></span><span class="op">&rsaquo;</span>
+          <span class="tile is-flipped" data-tile="5"></span><span class="op">&rsaquo;</span>
+          <span class="tile is-flipped" data-tile="2"></span>
+        </div>
+        <h3 class="h3">Chains run downhill</h3>
+        <p>A flipped tile topples every neighbour holding a lower number, and those
+          topple theirs. One good placement can take the whole board.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PLAY IT HERE ============================ -->
+<section id="try">
+  <div class="wrap band">
+    <div class="rv">
+      <p class="eyebrow">Your turn</p>
+      <h2 class="h2">Now play one for real.</h2>
+      <p class="lead" style="margin-top:14px">This is <b>1&#8209;8, Descent</b>, the eighth
+        level in the game, exactly as it ships. Three tiles, par two. The obvious move is
+        a trap, and one of these tiles adds nothing at all.</p>
+      <p class="lead" style="margin-top:12px">It runs the game's own rules engine, right
+        in this page. Same cascade, same rollover, unlimited undo.</p>
+    </div>
+    <div class="band-media rv">
+      <div class="try-board" id="try-board"></div>
+      <div class="after-win" id="after-win" hidden>
+        <h3 class="h3">That was a real level.</h3>
+        <p>There are 95 more, plus seven secret boards, and none of them have ads,
+          timers or energy. Pay once, own it forever.</p>
+        <a class="appstore lp-store" data-store
+           href="https://apps.apple.com/app/apple-store/id6789261861?pt=36573800&amp;ct=Tiktok%20First%20Campaign&amp;mt=8">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+          <span><span class="l1" data-store-l1>Download on the</span><span class="l2" data-store-l2>App Store</span></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ THE DEAL ============================ -->
+<section>
+  <div class="wrap">
+    <div class="buy rv">
+      <p class="eyebrow">The deal</p>
+      <p class="amount">$4.99<span class="accent">, once.</span></p>
+      <p class="lead" style="margin:16px auto 0; max-width:50ch">No subscription, no
+        in-app purchases, no ads, no season pass. Worlds seven and eight arrived free
+        after launch, and future level packs are included too.</p>
+      <a class="appstore lp-store" data-store
+         href="https://apps.apple.com/app/apple-store/id6789261861?pt=36573800&amp;ct=Tiktok%20First%20Campaign&amp;mt=8">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+        <span><span class="l1" data-store-l1>Download on the</span><span class="l2" data-store-l2>App Store</span></span>
+      </a>
+      <ul>
+        <li>All eight worlds, 96 levels</li><li>Seven secret levels</li><li>Daily Flip forever</li>
+        <li>One-Shot mode</li><li>Family Sharing</li><li>Nine languages</li>
+      </ul>
+      <p class="trust">Ninefall collects nothing. The App Store label reads
+        <b>Data Not Collected</b>. <a href="/privacy">Privacy policy</a></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Thomas Sobstyl</span>
+    <span>Made by one person, in public.</span>
+    <nav>
+      <a href="/">Ninefall.app</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/support">Support</a>
+      <a href="/beta">Android beta</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- Sticky bar, shown once the hero button leaves the screen. -->
+<div class="stick" id="stick" aria-hidden="true">
+  <div class="stick-in">
+    <div class="stick-txt"><b>Ninefall</b><span data-stick-sub>$4.99 once. No ads, ever.</span></div>
+    <a class="btn btn-primary stick-btn" data-store data-stick-btn
+       href="https://apps.apple.com/app/apple-store/id6789261861?pt=36573800&amp;ct=Tiktok%20First%20Campaign&amp;mt=8">Get it</a>
+  </div>
+</div>
+
+<script type="module">
+  import { initAll } from '/assets/site.js';
+  import { mountBoard } from '/assets/board.js';
+  import { RAMP } from '/assets/engine.js';
+
+  initAll();
+
+  // ---- App Store campaign link -------------------------------------------
+  // Every store button carries the App Store Connect campaign link, so installs
+  // and proceeds show up per campaign in App Store Connect with nothing added
+  // to the app and no script on this page. The static href is the base token.
+  // TikTok can add the creative name to the landing URL with its macros, e.g.
+  //   https://ninefall.app/tiktok?ad=__CID_NAME__
+  // and then each creative gets its own token, "TT <creative>", so A/B/C/D/E
+  // can be compared in App Store Connect. `?ct=` forces an exact token, which
+  // makes this page reusable for any other channel.
+  const PROVIDER_TOKEN = '36573800';
+  const APP_ID = '6789261861';
+  const BASE_TOKEN = 'Tiktok First Campaign';
+  const TOKEN_MAX = 30;                       // App Store Connect limit
+
+  const q = new URLSearchParams(location.search);
+  const clean = (s) => (s || '').replace(/[^\w .-]+/g, ' ').replace(/\s+/g, ' ').trim();
+  function campaignToken() {
+    const forced = clean(q.get('ct'));
+    if (forced && !forced.startsWith('__')) return forced.slice(0, TOKEN_MAX).trim();
+    const ad = clean(q.get('ad'));
+    if (!ad || ad.startsWith('__')) return BASE_TOKEN;   // no macro, or one TikTok left unfilled
+    return ('TT ' + ad).slice(0, TOKEN_MAX).trim();
+  }
+  const token = campaignToken();
+  const storeURL = `https://apps.apple.com/app/apple-store/id${APP_ID}` +
+                   `?pt=${PROVIDER_TOKEN}&ct=${encodeURIComponent(token)}&mt=8`;
+
+  // ---- platform: the ads target iOS, but the page should still make sense
+  // to an Android visitor, who can only get the beta today. `?os=` overrides
+  // the user agent so both states can be checked from a desktop.
+  const os = q.get('os') || (/android/i.test(navigator.userAgent) ? 'android'
+           : /iphone|ipad|ipod/i.test(navigator.userAgent) ? 'ios' : 'other');
+  const isAndroid = os === 'android';
+
+  document.querySelectorAll('[data-store]').forEach((a) => {
+    if (isAndroid) {
+      a.href = '/beta';
+      a.querySelector('[data-store-l1]') && (a.querySelector('[data-store-l1]').textContent = 'Free for testers');
+      a.querySelector('[data-store-l2]') && (a.querySelector('[data-store-l2]').textContent = 'Join the Android beta');
+      if (a.hasAttribute('data-stick-btn')) a.textContent = 'Join the beta';
+    } else {
+      a.href = storeURL;
+    }
+  });
+  if (isAndroid) {
+    document.querySelector('[data-android-line]')?.setAttribute('hidden', '');
+    document.querySelectorAll('[data-store] svg').forEach((svg) => svg.remove());
+    const sub = document.querySelector('[data-stick-sub]');
+    if (sub) sub.textContent = 'Android beta: the full game, free.';
+    const price = document.querySelector('.facts span');
+    if (price) price.textContent = 'Free for beta testers';
+  }
+  if (os === 'ios') {
+    // TikTok's in-app browser sometimes keeps an App Store link inside its own
+    // web view. After a store tap, offer itms-apps://, which hands the same
+    // campaign link straight to the App Store app.
+    const fb = document.querySelector('[data-ios-only]');
+    const itms = document.querySelector('[data-store-itms]');
+    if (fb && itms) {
+      itms.href = storeURL.replace(/^https:/, 'itms-apps:');
+      document.querySelectorAll('[data-store]').forEach((a) =>
+        a.addEventListener('click', () => setTimeout(() => { fb.hidden = false; }, 1200)));
+    }
+  }
+
+  // ---- sticky bar -----------------------------------------------------------
+  const stick = document.getElementById('stick');
+  const heroCta = document.getElementById('hero-cta');
+  if (stick && heroCta && 'IntersectionObserver' in window) {
+    document.body.classList.add('has-stick');
+    new IntersectionObserver(([e]) => {
+      const show = !e.isIntersecting && e.boundingClientRect.top < 0;
+      stick.classList.toggle('on', show);
+      stick.setAttribute('aria-hidden', String(!show));
+    }, { threshold: 0 }).observe(heroCta);
+  }
+
+  // ---- illustration tiles pick their colours from the game's own ramp ------
+  document.querySelectorAll('[data-tile]').forEach((el) => {
+    const v = +el.dataset.tile;
+    el.style.setProperty('--v', RAMP.flipped[v]);
+    el.style.setProperty('--vi', RAMP.inkFlipped(v));
+    if (!el.querySelector('.face')) el.innerHTML = `<span class="face up">${v}</span>`;
+  });
+
+  // ---- 1-8 · Descent, straight out of Campaign.swift ------------------------
+  const afterWin = document.getElementById('after-win');
+  mountBoard(document.getElementById('try-board'), {
+    rows: 4, cols: 3,
+    cellSpecs: ['0','6','2','6','7','6','5','5','3','2','4','5'],
+    hand: [0, 6, 6], par: 2, flourish: 'finishOnNine',
+  }, {
+    intro: 'Tap a tile in your hand, then a tile on the board. Par is two.',
+    onOutcome(o) {
+      if ((o.clearedBoard || o.isGrandCascade) && afterWin?.hidden) afterWin.hidden = false;
+    },
+  });
+</script>
+</body>
+</html>
