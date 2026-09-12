@@ -132,7 +132,7 @@
         <span>No energy</span><span>3.3 MB</span>
       </p>
       <p class="fallback" data-ios-only hidden>App Store did not open?
-        <a data-store-itms href="itms-apps://apps.apple.com/app/apple-store/id6789261861?pt=36573800&amp;ct=Tiktok%20First%20Campaign&amp;mt=8">Tap here</a>.</p>
+        <a data-store-fallback href="https://apps.apple.com/app/apple-store/id6789261861?pt=36573800&amp;ct=Tiktok%20First%20Campaign&amp;mt=8">Tap here</a>.</p>
     </div>
 
     <div>
@@ -296,6 +296,16 @@
   const storeURL = `https://apps.apple.com/app/apple-store/id${APP_ID}` +
                    `?pt=${PROVIDER_TOKEN}&ct=${encodeURIComponent(token)}&mt=8`;
 
+  // On iOS the store buttons use the itms-apps scheme rather than the https
+  // universal link. The ads land inside TikTok's in-app browser, which often
+  // renders apps.apple.com as a page within itself instead of handing off to
+  // the App Store app. That loses the visitor, and a page rendered in a web
+  // view never counts as a product page view in App Store Connect, so the whole
+  // campaign reads as if nobody arrived. The scheme hands the same `ct=` link
+  // straight to the store app. Desktop keeps https, where itms-apps would only
+  // raise a Mac App Store with nothing to show.
+  const storeSchemeURL = storeURL.replace(/^https:/, 'itms-apps:');
+
   // ---- platform: the ads target iOS, but the page should still make sense
   // to an Android visitor, who can only get the beta today. `?os=` overrides
   // the user agent so both states can be checked from a desktop.
@@ -310,7 +320,7 @@
       a.querySelector('[data-store-l2]') && (a.querySelector('[data-store-l2]').textContent = 'Join the Android beta');
       if (a.hasAttribute('data-stick-btn')) a.textContent = 'Join the beta';
     } else {
-      a.href = storeURL;
+      a.href = os === 'ios' ? storeSchemeURL : storeURL;
     }
   });
   if (isAndroid) {
@@ -322,13 +332,14 @@
     if (price) price.textContent = 'Free for beta testers';
   }
   if (os === 'ios') {
-    // TikTok's in-app browser sometimes keeps an App Store link inside its own
-    // web view. After a store tap, offer itms-apps://, which hands the same
-    // campaign link straight to the App Store app.
+    // A web view that refuses custom schemes would leave the tap doing nothing
+    // at all, so surface the https link shortly after a store tap as an escape
+    // hatch. Unlike before, the visitor is still on this page to see it: the
+    // scheme hands off to another app rather than navigating this one away.
     const fb = document.querySelector('[data-ios-only]');
-    const itms = document.querySelector('[data-store-itms]');
-    if (fb && itms) {
-      itms.href = storeURL.replace(/^https:/, 'itms-apps:');
+    const alt = document.querySelector('[data-store-fallback]');
+    if (fb && alt) {
+      alt.href = storeURL;
       document.querySelectorAll('[data-store]').forEach((a) =>
         a.addEventListener('click', () => setTimeout(() => { fb.hidden = false; }, 1200)));
     }
