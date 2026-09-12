@@ -21,6 +21,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400..900&display=swap">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="/assets/site.css">
+<!-- No /_vercel/insights script here, unlike every other page. This is the
+     destination of the /p/<code> rewrite, so the shared board code is in the
+     URL: counting it would log every board people pass around, which /privacy
+     promises never happens. Leave this page uncounted. -->
 <style>
   .play-wrap{max-width:520px; margin-inline:auto; text-align:center;}
   .play-board{width:min(430px,100%); margin:26px auto 0;}
