@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ninefall — drop one tile, flip the board</title>
-<meta name="description" content="A chain-reaction number puzzle for iPhone and iPad. Play a tile, the values add, and every lower number topples after it. Past nine they roll over. Eight worlds, 96 certified-fair levels, a Daily Flip for the whole world. $4.99 once. No ads, no tracking, no account.">
+<meta name="description" content="A chain-reaction number puzzle for iPhone and iPad. Play a tile, the values add, and every lower number topples after it. Past nine they roll over. Free to start: two worlds and the Daily Flip cost nothing, and one purchase unlocks all eight worlds and 96 certified-fair levels, forever. No ads, no tracking, no account.">
 <link rel="canonical" href="https://ninefall.app/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ninefall">
@@ -41,14 +41,41 @@
   .soon b{color:var(--ring); font-weight:900;}
   .appstore{padding:0; background:none; box-shadow:none;}
   .appstore:hover{transform:translateY(-1px); box-shadow:none;}
-  .drift-demo{display:flex; align-items:center; gap:16px; margin-top:26px;}
-  .drift-demo .tile{width:66px;}
-  .drift-demo .arrow{color:var(--ink-soft); font-weight:900; font-size:20px;}
+  .drift-demo,.leaf-demo{display:flex; align-items:center; gap:16px; margin-top:26px;}
+  .drift-demo .tile,.leaf-demo .tile{width:66px;}
+  .drift-demo .arrow,.leaf-demo .arrow{color:var(--ink-soft); font-weight:900; font-size:20px;}
+  .leaf-demo{flex-wrap:wrap; gap:12px;}
+  @media (max-width:560px){
+    .leaf-demo{gap:8px;}
+    .leaf-demo .tile{width:min(52px,15vw);}
+    .leaf-demo .arrow{font-size:16px;}
+  }
   .proof{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px;
     background:var(--panel); border-radius:14px; padding:16px 18px; color:var(--ink-soft);
     box-shadow:var(--tile-sink); line-height:1.8; overflow-x:auto;}
   .proof b{color:var(--ink); font-weight:700;}
   .proof .ok{color:#3E7D74; font-weight:700;}
+  /* Free vs unlock, side by side. One card per column on phones. */
+  .tiers{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:34px;}
+  .tier{background:var(--card); border-radius:24px; padding:28px 26px; box-shadow:var(--shadow-s);}
+  .tier.is-full{box-shadow:var(--shadow-m); outline:2px solid var(--ring); outline-offset:-2px;}
+  .tier-h{display:flex; flex-wrap:wrap; align-items:baseline; gap:10px;
+    font-size:19px; font-weight:900; letter-spacing:-.02em; margin:0 0 4px;}
+  .tier-p{font-size:15px; font-weight:900; color:var(--ring);}
+  .tier-s{font-size:13.5px; font-weight:800; color:var(--ink-soft); margin:0;}
+  .tier ul{list-style:none; padding:0; margin:18px 0 0; display:grid; gap:9px;
+    font-size:15px; font-weight:700; color:var(--ink-soft);}
+  .tier li{display:flex; gap:9px;}
+  .tier li::before{content:"\2713"; color:#3E7D74; font-weight:900; flex:none;}
+  :root[data-theme="night"] .tier li::before{color:#6FB3A6;}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="day"]) .tier li::before{color:#6FB3A6;}}
+  @media (max-width:760px){.tiers{grid-template-columns:1fr;}}
+  /* The seasonal pack: a dated run of boards, warmer than the page around it. */
+  .season-days{display:flex; flex-wrap:wrap; gap:7px; margin-top:24px;}
+  .season-days span{width:34px; height:34px; border-radius:26%; display:grid; place-items:center;
+    background:var(--panel); color:var(--ink-soft); font-size:13px; font-weight:900;
+    box-shadow:var(--tile-sink);}
+  .season-days span.on{background:var(--v4); color:var(--ink); box-shadow:var(--tile-rise);}
   :root[data-theme="night"] .proof .ok{color:#6FB3A6;}
   @media (prefers-color-scheme:dark){:root:not([data-theme="day"]) .proof .ok{color:#6FB3A6;}}
 </style>
@@ -63,6 +90,7 @@
     </a>
     <nav>
       <a class="hide-sm" href="#worlds">Worlds</a>
+      <a class="hide-sm" href="#price">What's free</a>
       <a class="hide-sm" href="#daily">Daily</a>
       <a href="/beta">Android beta</a>
       <a href="/press">Press</a>
@@ -83,7 +111,7 @@
       <p class="tagline">Drop one tile, flip the board.</p>
       <p class="lead">A chain-reaction number puzzle for iPhone and iPad. Play a tile,
         the values add, and every lower-numbered neighbour topples after it. Past nine,
-        numbers roll over.</p>
+        numbers roll over. Free to start, and one purchase opens everything else.</p>
       <div class="cta">
         <a class="appstore" href="https://apps.apple.com/app/id6789261861">
           <img src="/assets/badge-download.svg" alt="Download Ninefall on the App Store">
@@ -91,7 +119,7 @@
         <a class="soon" href="/beta">Google Play, soon &middot; <b>join the Android beta</b></a>
       </div>
       <p class="facts">
-        <span>$4.99, once</span><span>3.3 MB</span><span>96 levels</span>
+        <span>Free to start</span><span>3.3 MB</span><span>96 levels</span>
         <span>9 languages</span><span>Plays offline</span>
       </p>
     </div>
@@ -191,9 +219,10 @@
         <div><b>result</b> <span class="ok">certified</span></div>
       </div>
       <p class="board-note" style="text-align:left; max-width:none">The real record for
-        the level you just played, taken from the game's own level data. 103 boards carry
-        one, including all seven secrets. Clear a whole board in a single placement and
-        that is a <b>Grand Cascade</b>, which is what the game is really about.</p>
+        the level you just played, taken from the game's own level data. 118 boards carry
+        one: all 96 levels, all seven secrets, and the fifteen boards of the Autumn season.
+        Clear a whole board in a single placement and that is a <b>Grand Cascade</b>, which
+        is what the game is really about.</p>
     </div>
   </div>
 </section>
@@ -237,6 +266,67 @@
   </div>
 </section>
 
+<!-- ============================ FREE TO START ============================ -->
+<section id="price">
+  <div class="wrap band">
+    <div class="rv">
+      <p class="eyebrow">The deal, up front</p>
+      <h2 class="h2">Start free. Unlock once.<br>Keep it forever.</h2>
+      <p class="lead" style="margin-top:18px">Download it and play. The first two worlds,
+        a secret level and the Daily Flip cost nothing and stay that way. When you want
+        the rest, one purchase opens it, and that is the only purchase there will ever be.
+        No lives, no energy, no currency, no second product.</p>
+      <p class="lead" style="margin-top:14px">Nothing is dangled at you either. Locked
+        worlds sit on the map plainly marked, the unlock is one sheet with one price on
+        it, and there are no countdowns or crossed-out numbers anywhere near it.</p>
+    </div>
+    <div class="band-media rv">
+      <div class="device"><img src="/assets/screen-map.webp" width="620" height="1348"
+        alt="The Journey map with worlds one and two open, captioned: two worlds free, one unlock for all eight"
+        loading="lazy"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="tiers rv" style="margin-top:clamp(36px,5vw,58px)">
+      <div class="tier">
+        <p class="tier-h">Free</p>
+        <p class="tier-s">Nothing to enter, nothing to decline.</p>
+        <ul>
+          <li>Worlds 1 and 2, 24 levels</li>
+          <li>World 2's secret level</li>
+          <li>The Daily Flip, in full, every day</li>
+          <li>One-Shot, the first ten boards</li>
+          <li>Unlimited undo and the solver hint</li>
+          <li>Day and Night, Game Center, widgets</li>
+          <li>Any board a friend shares with you</li>
+          <li>Every seasonal pack while it runs</li>
+        </ul>
+      </div>
+      <div class="tier is-full">
+        <p class="tier-h">Full game, forever <span class="tier-p">$4.99</span></p>
+        <p class="tier-s">One purchase. No subscription, ever.</p>
+        <ul>
+          <li>Worlds 3 to 8, 72 more levels</li>
+          <li>The six other secret levels</li>
+          <li>The whole One-Shot ladder</li>
+          <li>The Sandbox</li>
+          <li>Every future world and pack, included</li>
+          <li>Family Sharing, up to six people</li>
+          <li>Still no ads, no tracking, no account</li>
+          <li>Yours on every device you sign in on</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="board-note rv" style="text-align:left; max-width:64ch; margin-inline:0">
+      <b>Bought Ninefall when it cost $4.99?</b> Everything stays yours, automatically.
+      The game reads your original purchase from the App Store, unlocks the lot, puts a
+      <b>Founder</b> row in Settings and hands back the first app icon. Nothing to
+      restore, nothing to claim.</p>
+  </div>
+</section>
+
 <!-- ============================ THE DRIFT ============================ -->
 <section>
   <div class="wrap band reverse">
@@ -245,7 +335,7 @@
         muted loop playsinline preload="none" aria-label="A cascade running across a wormhole board"></video></div>
     </div>
     <div class="rv">
-      <p class="eyebrow">New in the free update</p>
+      <p class="eyebrow">Worlds seven and eight</p>
       <h2 class="h2">The board fights back.</h2>
       <p class="lead" style="margin-top:16px">World seven adds the shifter. It gains one
         after every move you make, whether you touch it or not, and nine falls to nothing.
@@ -258,7 +348,8 @@
         <span class="tile is-flipped" id="drift-c" data-tile="7"></span>
       </div>
       <p class="board-note" style="text-align:left; margin-left:0">One shifter, three
-        moves later. Worlds seven and eight arrived free, after launch.</p>
+        moves later. Worlds seven and eight arrived after launch, free to everyone who
+        already had the game, and they sit inside the same one unlock today.</p>
     </div>
   </div>
 </section>
@@ -277,13 +368,50 @@
         <b data-daily-number>#251</b>, <span data-daily-date>September 8</span>. The same
         five-by-five for everyone, everywhere, built on your device from the date alone.
         There is no server behind it and no account to make.</p>
-      <p class="lead" style="margin-top:14px">Keep a streak and put tomorrow's board on
-        your Home Screen with the widget. Miss a day and you get one free repair a month,
-        because life happens.</p>
+      <p class="lead" style="margin-top:14px">Keep a streak and put the board itself on
+        your Home Screen. The large widget shows today's grid and the four numbers in your
+        hand, so you can plan the cascade before you open the app, and raises your cleared
+        board as a trophy once you solve it. On iOS 27 it goes extra-large and fills the
+        screen. Miss a day and you get one free repair a month, because life happens.</p>
       <p class="facts" style="margin-top:22px">
-        <span>Game Center leaderboard</span><span>Lowest move count wins</span>
+        <span>Free, always</span><span>Game Center leaderboard</span>
+        <span>Lowest move count wins</span>
       </p>
     </div>
+  </div>
+</section>
+
+<!-- ============================ SEASONS ============================ -->
+<section id="seasons">
+  <div class="wrap">
+    <p class="eyebrow rv">Seasons</p>
+    <h2 class="h2 rv">Autumn: every leaf falls<br>in its own time.</h2>
+    <p class="lead rv" style="margin-top:18px; max-width:58ch">A season is a dated run of
+      boards that opens one a day and then stays yours forever. <b>Autumn</b> is the first:
+      fifteen boards from October 1, built around one new tile, with warmer paper, leaves
+      drifting past the board and a cascade tuned to a minor key.</p>
+    <p class="lead rv" style="margin-top:14px; max-width:58ch">The <b>leaf</b> loses a
+      number every time a placement resolves. Flip it while it still stands, or let it
+      reach zero, fall, and wall that square off for good. Every board is certified the
+      same way the campaign is: par exact, witness stored, and the leaf proven to matter.</p>
+    <div class="leaf-demo rv" aria-hidden="true">
+      <span class="tile" data-leaf="2"></span><span class="arrow">&rsaquo;</span>
+      <span class="tile" data-leaf="1"></span><span class="arrow">&rsaquo;</span>
+      <span class="tile" data-leaf="0"></span><span class="arrow">&rsaquo;</span>
+      <span class="tile stone" data-leaf="fallen"></span>
+    </div>
+    <p class="board-note rv" style="text-align:left; max-width:60ch; margin-inline:0">
+      One leaf, one placement at a time, and the move after zero drops it. A fallen leaf is
+      a stone: it never flips again, and nothing cascades through it.</p>
+
+    <div class="season-days rv" aria-hidden="true"></div>
+    <p class="board-note rv" data-season-state
+       style="text-align:left; max-width:60ch; margin-inline:0">One board a day,
+      October 1 to October 15.</p>
+    <p class="board-note rv" style="text-align:left; max-width:60ch; margin-inline:0">
+      Every board is <b>free for everyone while the season runs</b>, unlocked or not. When
+      it closes the pack joins the full game, and anything you opened stays yours either
+      way.</p>
   </div>
 </section>
 
@@ -334,11 +462,13 @@
     <p class="eyebrow rv">The whole picture</p>
     <h2 class="h2 rv" style="margin-bottom:34px">No asterisks.</h2>
     <dl class="spec rv">
-      <div><dt>Price</dt><dd>$4.99, once</dd></div>
-      <div><dt>In-app purchases</dt><dd>None</dd></div>
+      <div><dt>Price</dt><dd>Free to start</dd></div>
+      <div><dt>In-app purchases</dt><dd>One, $4.99, the full game</dd></div>
+      <div><dt>Free without paying</dt><dd>Worlds 1 and 2, a secret, the Daily Flip</dd></div>
       <div><dt>Download size</dt><dd>3.3 MB</dd></div>
       <div><dt>Ads</dt><dd>None</dd></div>
       <div><dt>Levels</dt><dd>96, plus 7 secrets</dd></div>
+      <div><dt>Seasonal packs</dt><dd>Autumn, 15 boards, free while it runs</dd></div>
       <div><dt>Data collected</dt><dd>None</dd></div>
       <div><dt>Requires</dt><dd>iOS 17 or later</dd></div>
       <div><dt>Account needed</dt><dd>No</dd></div>
@@ -347,7 +477,7 @@
       <div><dt>Family Sharing</dt><dd>Yes</dd></div>
       <div><dt>iCloud sync</dt><dd>Yes</dd></div>
       <div><dt>Game Center</dt><dd>Leaderboard and achievements</dd></div>
-      <div><dt>Home Screen widget</dt><dd>Yes</dd></div>
+      <div><dt>Home Screen widget</dt><dd>Streak, and today's board in the large sizes</dd></div>
       <div><dt>Accessibility</dt><dd>VoiceOver, Reduce Motion, no colour-only cues</dd></div>
       <div><dt>Android</dt><dd><a href="/beta" style="color:var(--ring)">In beta now</a></dd></div>
     </dl>
@@ -376,19 +506,25 @@
   <div class="wrap">
     <div class="buy rv">
       <p class="eyebrow">The deal</p>
-      <p class="amount">$4.99<span class="accent">, once.</span></p>
-      <p class="lead" style="margin:18px auto 0; max-width:52ch">No subscription, no
-        in-app purchases, no ads, no season pass. Worlds seven and eight arrived free
-        after launch, and future level packs are included too.</p>
+      <p class="amount">Free<span class="accent"> to start.</span></p>
+      <p class="lead" style="margin:18px auto 0; max-width:54ch">Two worlds and the Daily
+        Flip cost nothing. One purchase, <b>$4.99</b>, opens everything else and keeps it
+        open: no subscription, no second product, no ads, no season pass. Worlds seven and
+        eight arrived free after launch, and every future world and pack is included too.</p>
       <div class="cta" style="justify-content:center; margin-top:28px">
         <a class="appstore" href="https://apps.apple.com/app/id6789261861">
           <img src="/assets/badge-download.svg" alt="Download Ninefall on the App Store">
         </a>
       </div>
+      <p class="tier-s" style="margin:30px 0 -8px">What the one purchase opens</p>
       <ul>
         <li>All eight worlds</li><li>Seven secret levels</li><li>Daily Flip forever</li>
-        <li>One-Shot mode</li><li>Family Sharing</li><li>Nine languages</li>
+        <li>One-Shot and Sandbox</li><li>Every future pack</li><li>Family Sharing</li>
+        <li>Nine languages</li>
       </ul>
+      <p class="board-note" style="max-width:52ch">Already bought it? You keep everything,
+        plus the Founder icon. <a href="#price" style="color:var(--ring); font-weight:900">What
+        free gets you</a>.</p>
     </div>
   </div>
 </section>
@@ -412,9 +548,12 @@
 "applicationCategory":"GameApplication","operatingSystem":"iOS 17.0 or later",
 "description":"A chain-reaction number puzzle. Numbers add, past nine they roll over, and every lower-numbered neighbour topples after them.",
 "url":"https://ninefall.app/","installUrl":"https://apps.apple.com/app/id6789261861",
-"fileSize":"3.3 MB","softwareVersion":"1.1","inLanguage":["en","ja","zh-Hans","zh-Hant","ko","de","fr","es","pt-BR"],
+"fileSize":"3.3 MB","softwareVersion":"1.3","inLanguage":["en","ja","zh-Hans","zh-Hant","ko","de","fr","es","pt-BR"],
 "author":{"@type":"Person","name":"Thomas Sobstyl"},
-"offers":{"@type":"Offer","price":"4.99","priceCurrency":"USD"}}
+"offers":{"@type":"Offer","price":"0","priceCurrency":"USD",
+  "description":"Free to download. Worlds 1 and 2, a secret level and the Daily Flip are free; one in-app purchase unlocks the full game forever."},
+"hasPart":{"@type":"Offer","name":"Full game, forever","price":"4.99","priceCurrency":"USD",
+  "description":"Every world, secret and mode. One purchase."}}
 </script>
 
 <script type="module">
@@ -446,6 +585,40 @@
     cellSpecs: ['0','6','2','6','7','6','5','5','3','2','4','5'],
     hand: [0, 6, 6], par: 2, flourish: 'finishOnNine',
   }, { intro: 'Tap a tile in your hand, then a tile on the board. Par is two.' });
+
+  // The leaf, counting itself down: unflipped chips from the muted ramp, and a
+  // stone at the end, drawn the same way board.js draws them.
+  document.querySelectorAll('[data-leaf]').forEach((el) => {
+    if (el.dataset.leaf === 'fallen') { el.innerHTML = '<span class="face down"></span>'; return; }
+    const v = +el.dataset.leaf;
+    el.style.setProperty('--m', RAMP.muted[v]);
+    el.style.setProperty('--mi', RAMP.inkMuted(v));
+    el.innerHTML = `<span class="face down">${v}</span>`;
+  });
+
+  // Autumn: fifteen dated boards. The strip fills as the season opens them, and
+  // the line under it says where today sits, in UTC, the way the game does.
+  const strip = document.querySelector('.season-days');
+  const state = document.querySelector('[data-season-state]');
+  if (strip) {
+    const DAYS = 15;
+    const start = Date.UTC(2026, 9, 1);              // October 1, 2026
+    const today = Date.now();
+    const open = Math.floor((today - start) / 86400000) + 1;   // 1-based, <=0 before
+    strip.innerHTML = Array.from({ length: DAYS }, (_, i) => {
+      if (i >= open) return `<span>${i + 1}</span>`;
+      const v = 1 + Math.round((i * 8) / (DAYS - 1));   // day 1 pale, day 15 deep
+      return `<span class="on" style="background:${RAMP.flipped[v]};`
+           + `color:${RAMP.inkFlipped(v)}">${i + 1}</span>`;
+    }).join('');
+    if (state) {
+      state.textContent = open <= 0
+        ? `Autumn opens on October 1. Fifteen boards, one a day.`
+        : open > DAYS
+          ? `All fifteen boards are open, and they stay playable.`
+          : `Day ${open} of ${DAYS} is open. A new board every day until October 15.`;
+    }
+  }
 
   // The shifter, ticking once per move.
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {

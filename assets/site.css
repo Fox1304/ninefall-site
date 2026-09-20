@@ -98,6 +98,9 @@ section{padding-block:calc(var(--step)/2);}
   transition:border-color .3s ease;
 }
 .nav.stuck{border-bottom-color:var(--hair);}
+/* The nav is sticky and 62px tall, so an in-page anchor has to stop short of
+   it or the section's eyebrow lands underneath. */
+section[id]{scroll-margin-top:78px;}
 .nav .wrap{display:flex; align-items:center; gap:18px; height:62px;}
 .nav .brand{display:flex; align-items:center; gap:10px; font-size:19px;}
 .nav .brand img{width:28px; height:28px;}
