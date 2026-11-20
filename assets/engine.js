@@ -14,6 +14,7 @@ export const KIND = {
   trap: 'trap',       // must stay unflipped; flipping one fails the level
   portal: 'portal',   // entangled pair: one flips, its twin flips with it
   shifter: 'shifter', // gains +1 (mod 10) after every placement while unflipped
+  leaf: 'leaf',       // loses 1 after every placement while unflipped; falls at 0 into a stone
 };
 
 /** The value ramp from ios/Ninefall/Theme.swift. Luminance-monotonic and
@@ -41,6 +42,7 @@ export function parseCell(spec) {
     case 'b':  return tile(value, KIND.bomb);
     case 't':  return tile(value, KIND.trap);
     case 'f':  return tile(value, KIND.shifter);
+    case 'l':  return tile(value, KIND.leaf);
     case 'g':  return { ...tile(value), hasGem: true };
     case 'p0': return { ...tile(value, KIND.portal), portalID: 0 };
     case 'p1': return { ...tile(value, KIND.portal), portalID: 1 };
@@ -201,6 +203,18 @@ export class GameState {
       }
     });
 
+    // Leaves wither once the cascade settles: every still-unflipped leaf
+    // loses 1, and a leaf with nothing left falls, becoming a stone (Autumn
+    // pack, GDD D41). Mirrors GameState.swift.
+    const withered = [];
+    const fallen = [];
+    tiles.forEach((t, i) => {
+      if (t.kind === KIND.leaf && !t.isFlipped) {
+        if (t.value > 0) { t.value -= 1; withered.push(i); }
+        else { t.kind = KIND.stone; fallen.push(i); }
+      }
+    });
+
     this.rack.splice(rackIndex, 1);
     this.moves += 1;
 
@@ -209,7 +223,7 @@ export class GameState {
 
     return {
       target, playedValue: played, newValue: tiles[target].value, wasOverplay,
-      waves, cracks, gems, sprungTraps, shifted, remainingBefore,
+      waves, cracks, gems, sprungTraps, shifted, withered, fallen, remainingBefore,
       clearedBoard: this.isWon, chain,
       isGrandCascade: this.isWon && remainingBefore >= 5,
       didRollover: tiles[target].value < played,
