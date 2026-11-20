@@ -18,6 +18,7 @@ const KIND_LABEL = {
   stone: 'stone, never flips', sealed: 'sealed, cascade only',
   ice: 'ice, cracks first', bomb: 'bomb, flips all four neighbours',
   trap: 'trap, must not flip', portal: 'wormhole', shifter: 'shifter, grows each move',
+  leaf: 'leaf, loses one each move',
 };
 
 export function mountBoard(root, level, opts = {}) {
